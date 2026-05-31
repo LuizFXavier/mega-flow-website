@@ -14,7 +14,7 @@ export const authService = {
             return data.tokenDeAcesso;
         }
         catch(e){
-            return ''
+            throw e;
         }
     }
 }

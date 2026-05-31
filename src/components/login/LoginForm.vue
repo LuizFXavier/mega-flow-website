@@ -1,4 +1,8 @@
 <script setup lang="ts">
+// TODO: não deixar que qualquer texto no login deixe passar
+// TODO: verificar se e-mail e senha foram colocados
+// TODO: colocar texto com a logo
+
 import { reactive, ref } from 'vue'
 import api from '@/services/api.ts'
 import LoginFormInputBox from './LoginFormInputBox.vue';

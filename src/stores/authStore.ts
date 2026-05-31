@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
       userStore.setUserFromToken(responseToken);
     }
     catch(e){
-
+      throw(e)
     }
     
   }
