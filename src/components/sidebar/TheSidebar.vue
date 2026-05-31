@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import SidebarNav from './SidebarNav.vue';
+import { useAuthStore } from '@/stores/authStore.ts';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+function handleLogout(){
+    authStore.logout();
+    router.push('/login')
+}
 
 </script>
 <template>
@@ -26,7 +35,8 @@ import SidebarNav from './SidebarNav.vue';
             <SidebarNav target-route="/projects" icon-url="/icon/sidebar/projects.png"/>
             <SidebarNav target-route="/members" icon-url="/icon/sidebar/members.png"/>
 
-            <button class="justify-items-center 
+            <button @click="handleLogout"
+                    class="justify-items-center 
                            mt-4">
                 <img src="/icon/sidebar/log-out.png" alt="icon">
             </button>
