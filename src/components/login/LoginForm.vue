@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import http from '@/services/http.ts'
+import api from '@/services/api.ts'
 import LoginFormInputBox from './LoginFormInputBox.vue';
+import { useAuthStore } from '@/stores/authStore.ts';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
 
 const showPassword = ref<Boolean>(false);
 
@@ -10,12 +14,15 @@ interface UserData{
     senha:string;
 }
 
-const user = reactive<UserData>({email:'', senha:''})
-
+const user = reactive<UserData>({email:'Jubileu@megaflow.com', senha:'JubileuAoMolho'});
+const router = useRouter();
 async function handleLogin(){
     try{
-        const {data} = await http.get('');
-        console.log(data)
+        await authStore.login(user);
+
+        const to = authStore.useIntention();
+
+        router.push(to)
     }
     catch(e){
 
@@ -58,7 +65,7 @@ async function handleLogin(){
                     <img src="/icon/lock.png" class="w-5 h-6"/>
 
                     <input v-model="user.senha"
-                           :type="showPassword ? 'text' : 'senha'" 
+                           :type="showPassword ? 'text' : 'password'" 
                            class="h-full w-9/10"/>
 
                     <button type="button" 
