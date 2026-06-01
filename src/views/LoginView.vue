@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import LoginForm from '@/components/login/LoginForm.vue';
+import LoginText from '@/components/login/LoginText.vue';
 
 </script>
 
@@ -9,7 +10,7 @@ import LoginForm from '@/components/login/LoginForm.vue';
               flex">
 
         <div class="h-full w-55/100">
-
+            <LoginText/>
         </div>
         <div class="w-45/100 h-full bg-black">
             <LoginForm/>
