@@ -1,7 +1,5 @@
 import type { LoginData } from "@/types/LoginData";
 import api from "./api"
-import { jwtDecode } from "jwt-decode";
-import type { UserAPI } from "@/types/User";
 
 export const authService = {
   
