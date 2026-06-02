@@ -23,6 +23,7 @@ function handleLogout(){
                     rounded-t-2xl
                     flex
                     place-items-center
+                    justify-end
                     ">
 
             <SidebarNav target-route="/projects" icon-url="/icon/sidebar/projects.png"/>
@@ -33,7 +34,8 @@ function handleLogout(){
         <SidebarNav target-route="/members" icon-url="/icon/sidebar/members.png"/>
 
         <button @click="handleLogout"
-                class="justify-items-center 
+                class="justify-center 
+                       flex
                         mt-4">
             <img src="/icon/sidebar/log-out.png" alt="icon">
         </button>

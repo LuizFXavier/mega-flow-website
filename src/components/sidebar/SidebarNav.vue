@@ -11,7 +11,8 @@ const props = defineProps({
 <template>
     <RouterLink :to="targetRoute" 
                 class="w-full
-                       justify-items-center
+                       flex
+                       justify-center
                        py-4"
                 >
 
