@@ -1,5 +1,5 @@
 import { memberService } from "@/services/memberService";
-import { Member, type UserAPI } from "@/types/Member";
+import { Member, parseUser, type UserAPI } from "@/types/Member";
 import { jwtDecode } from "jwt-decode";
 import { defineStore } from "pinia";
 import { reactive, type Reactive } from "vue";
@@ -11,11 +11,8 @@ export const useUserStore = defineStore('user', ()=>{
 
     async function setUserFromToken(token:string){
         const payload = jwtDecode(token) as UserAPI;
-        
-        user.rga = payload.sub;
-        user.cargo = payload.cargo;
 
-        const member = await memberService.getMember(user.rga);
+        const member = parseUser(payload);
 
         user.set(member);
         
