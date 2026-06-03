@@ -5,18 +5,16 @@ import { reactive, ref } from 'vue'
 import LoginFormInputBox from './LoginFormInputBox.vue';
 import { useAuthStore } from '@/stores/authStore.ts';
 import { useRouter } from 'vue-router';
+import type { LoginData } from '@/types/LoginData.ts';
 
 const authStore = useAuthStore();
 
 const showPassword = ref<Boolean>(false);
 
-interface UserData{
-    email:string;
-    senha:string;
-}
+const user = reactive<LoginData>({email:'mateus@ufms.br', senha:'Mateus1234'});
 
-const user = reactive<UserData>({email:'Jubileu@megaflow.com', senha:'JubileuAoMolho'});
 const router = useRouter();
+
 async function handleLogin(){
     try{
         await authStore.login(user);
