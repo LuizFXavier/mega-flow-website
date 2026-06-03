@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import TheHeader from '@/components/TheHeader.vue';
-import TheSidebar from '@/components/sidebar/TheSidebar.vue';
+import TheProjectHeader from '@/components/projectsPage/TheProjectHeader.vue';
+import BaseLayout from '@/layout/BaseLayout.vue';
+
 </script>
 
 <template>
-    <TheHeader/>
-    <TheSidebar/>
-    <h1>Projetos</h1>
+    <BaseLayout>
+        <template v-slot:header>
+            <TheProjectHeader/>
+        </template>
+
+    </BaseLayout>
 </template>
