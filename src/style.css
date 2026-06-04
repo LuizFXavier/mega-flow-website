@@ -8,6 +8,10 @@ input[type="button"] {
     cursor: pointer;
 }
 
+main{
+  font-family: var(--font-inter);
+}
+
 @theme {
   --color-mega-light: #8242D2;
   --color-mega-dark: #43226C;
