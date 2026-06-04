@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import TheSidebar from '@/components/sidebar/TheSidebar.vue';
+import { ref } from 'vue';
+
+const isSidebarOpen = ref<boolean>(true)
+
 </script>
 
 <template>
     <div class="w-full h-full
                  flex flex-row">
 
-        <section class = "h-full w-9/200 
-                      content-center
-                      ml-3 mr-3">
-            <TheSidebar/>
+        <section class="h-full 
+                        content-center
+                        ml-3 mr-3"
+                 :class="{'w-9/200':!isSidebarOpen, 'w-30/200':isSidebarOpen}">
+            <TheSidebar v-model="isSidebarOpen"/>
         </section>
-        <section class = "h-full w-191/200 
-                      items-center
-                      flex 
-                      mr-3">
+        <section class="h-full
+                        items-center
+                        flex 
+                        mr-3"
+                 :class="{'w-191/200':!isSidebarOpen, 'w-170/200':isSidebarOpen}">
 
             <div class="h-95/100 w-full 
                         flex flex-col 
