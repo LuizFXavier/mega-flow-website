@@ -2,6 +2,7 @@
 import { useUserStore } from '@/stores/userStore';
 import { type Participant } from '@/types/Participant';
 import DashboardReportItem from './DashboardReportItem.vue';
+import TheSearchBar from '../TheSearchBar.vue';
 
 const userStore = useUserStore();
 
@@ -32,8 +33,9 @@ const statusMap = new Map<string, string>([
         <header class="w-full
                        border-b border-b-gray-border
                        h-12/100
+                       flex flex-row
                        ">
-            <div class="flex flex-col pt-1 pl-3">
+            <div class="flex flex-col pt-1 pl-3 w-1/4">
                 <h1 class="text-base">
                     Meus projetos
                 </h1>
@@ -41,6 +43,13 @@ const statusMap = new Map<string, string>([
                     Acompanhe progresso e status
                 </h2>
             </div>
+            
+            <div class="flex 
+                        p-3
+                        w-1/2">
+                <TheSearchBar :text="'Buscar Projeto'"/>
+            </div>
+            <div class="w-1/4"></div>
         </header>
 
         <table v-if="projects.length > 0" class="w-full">
