@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { memberService } from '@/services/memberService';
-import { projectService } from '@/services/projectService';
 import { useUserStore } from '@/stores/userStore';
 import { type Participant } from '@/types/Participant';
+import DashboardReportItem from './DashboardReportItem.vue';
 
 const userStore = useUserStore();
 
@@ -28,20 +27,53 @@ const statusMap = new Map<string, string>([
 
 </script>
 <template>
-    <table>
-        <thead>
-            <tr>
-            <th>PROJETOS</th>
-            <th>CARGO</th>
-            <th>ANDAMENTO</th>
-            </tr>
-        </thead>
-        <tbody v-for="p in projects">
-            <tr>
-            <td>{{ p.projeto.titulo }}</td>
-            <td>{{roleMap.get(p.funcao)}}</td>
-            <td>{{ statusMap.get(p.projeto.status) }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <section class="h-full w-full flex flex-col">
+
+        <header class="w-full
+                       border-b border-b-gray-border
+                       h-12/100
+                       ">
+            <div class="flex flex-col pt-1 pl-3">
+                <h1 class="text-base">
+                    Meus projetos
+                </h1>
+                <h2 class="text-sm text-gray-500">
+                    Acompanhe progresso e status
+                </h2>
+            </div>
+        </header>
+
+        <table v-if="projects.length > 0" class="w-full">
+            <thead class = "justify-items-start
+                            border-y border-gray-border
+                            text-lg
+                            ">
+                <tr>
+                <th class="text-left
+                           w-35/100
+                           pl-5
+                           py-1">PROJETOS</th>
+                <th class="text-center w-30/100">CARGO</th>
+                <th class="text-center w-35/100">ANDAMENTO</th>
+                </tr>
+            </thead>
+            <tbody v-for="p in projects">
+                <DashboardReportItem :titulo="p.projeto.titulo"
+                                     :cargo="roleMap.get(p.funcao)!"
+                                     :andamento="statusMap.get(p.projeto.status)!"/>
+            </tbody>
+        </table>
+        <div v-else class= "w-full h-full
+                            flex place-items-center
+                            justify-center">
+            <div class="h-1/2">
+
+                <p class = "text-center
+                            text-[1.75rem]">
+                    Você ainda não está participando de nenhum projeto.
+                    Entre em <br> contato com seu diretor para ser alocado.
+                </p>
+            </div>
+        </div>
+    </section>
 </template>
