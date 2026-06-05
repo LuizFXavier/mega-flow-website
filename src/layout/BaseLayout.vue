@@ -1,26 +1,26 @@
 <script setup lang="ts">
 import TheSidebar from '@/components/sidebar/TheSidebar.vue';
-import { ref } from 'vue';
+import { useSidebarStore } from '@/stores/sidebarStore';
 
-const isSidebarOpen = ref<boolean>(true)
+const sidebarStore = useSidebarStore();
 
 </script>
 
 <template>
     <div class="w-full h-full
-                 flex flex-row">
+                 flex flex-row gap-2 px-5">
 
         <section class="h-full 
                         content-center
-                        ml-3 mr-3"
-                 :class="{'w-9/200':!isSidebarOpen, 'w-30/200':isSidebarOpen}">
-            <TheSidebar v-model="isSidebarOpen"/>
+                         "
+                 :class="{'w-10/200':!sidebarStore.state, 'w-30/200':sidebarStore.state}">
+            <TheSidebar/>
         </section>
         <section class="h-full
                         items-center
                         flex 
-                        mr-3"
-                 :class="{'w-191/200':!isSidebarOpen, 'w-170/200':isSidebarOpen}">
+                        "
+                 :class="{'w-190/200':!sidebarStore.state, 'w-170/200':sidebarStore.state}">
 
             <div class="h-95/100 w-full 
                         flex flex-col 

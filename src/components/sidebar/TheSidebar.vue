@@ -3,8 +3,11 @@ import { useRouter } from 'vue-router'
 import SidebarNav from './SidebarNav.vue';
 import { useAuthStore } from '@/stores/authStore.ts';
 import { ref } from 'vue';
+import type { SidebarEntry } from '@/types/SidebarEntry.ts';
+import { useSidebarStore } from '@/stores/sidebarStore.ts';
 
 const authStore = useAuthStore();
+const sidebarStore = useSidebarStore();
 const router = useRouter();
 
 const isSideBarOpen = defineModel<boolean>();
@@ -15,7 +18,7 @@ function handleLogout(){
 }
 
 function toggleSidebar(){
-    isSideBarOpen.value = !isSideBarOpen.value;
+    sidebarStore.toggle();
 }
 
 </script>
@@ -39,19 +42,22 @@ function toggleSidebar(){
 
         <SidebarNav target-route="/" 
                     icon-url="/icon/sidebar/menu.png"
-                    :is-sidebar-open="isSideBarOpen">
+                    :is-sidebar-open="sidebarStore.state"
+                    :marked="sidebarStore.entry == 'inicio'">
             Início
         </SidebarNav>
 
         <SidebarNav target-route="/projects" 
                     icon-url="/icon/sidebar/projects.png"
-                    :is-sidebar-open="isSideBarOpen">
+                    :is-sidebar-open="sidebarStore.state"
+                    :marked="sidebarStore.entry == 'projetos'">
             Projetos
         </SidebarNav>
         
         <SidebarNav target-route="/members" 
                     icon-url="/icon/sidebar/members.png"
-                    :is-sidebar-open="isSideBarOpen">
+                    :is-sidebar-open="isSideBarOpen"
+                    :marked="sidebarStore.entry == 'membros'">
             Membros            
         </SidebarNav>
 

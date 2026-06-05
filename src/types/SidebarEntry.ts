@@ -1,0 +1,1 @@
+export type SidebarEntry = "inicio" | "projetos" | "membros" | "";

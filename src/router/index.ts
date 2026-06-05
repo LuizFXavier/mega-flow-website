@@ -4,12 +4,15 @@ import MembersView from '@/views/MembersView.vue'
 import ProjectsView from '@/views/ProjectsView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { requireAnon, requireAuth } from './requirement'
+import { useSidebarStore } from '@/stores/sidebarStore'
+import type { SidebarEntry } from '@/types/SidebarEntry'
 
 const routes = [
   { path: '/', 
     component: DashboardView,
     meta:{
-      auth : true
+      auth : true,
+      siderbarEntry:'inicio'
     } 
   },
   { path: '/login', 
@@ -21,13 +24,15 @@ const routes = [
   { path: '/projects',
     component: ProjectsView,
     meta:{
-      auth : true
+      auth : true,
+      siderbarEntry:'projetos'
     } 
   },
   { path: '/members', 
     component: MembersView,
     meta:{
-      auth : true
+      auth : true,
+      siderbarEntry:'membros'
     } 
   }
 ]
@@ -39,6 +44,12 @@ const router = createRouter({
 
 router.beforeEach((to, from) =>{
   if(to.meta?.auth){
+    const sidebarStore = useSidebarStore();
+    
+    if (to.meta?.siderbarEntry){
+      const siderbarEntry = to.meta.siderbarEntry as SidebarEntry;
+      sidebarStore.set(siderbarEntry);
+    }
     return requireAuth(to, from);
   }
   else{
