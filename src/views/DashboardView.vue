@@ -14,7 +14,6 @@ const userStore = useUserStore();
 
 onMounted(async ()=>{
     projects.value = await projectService.getMemberProjects(userStore.user.rga);
-    console.log(projects.value)
 })
 
 </script>
