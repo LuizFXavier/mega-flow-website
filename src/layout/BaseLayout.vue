@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import TheSidebar from '@/components/sidebar/TheSidebar.vue';
+import { memberService } from '@/services/memberService';
 import { useSidebarStore } from '@/stores/sidebarStore';
+import { useUserStore } from '@/stores/userStore';
+import { onMounted, ref, type Ref } from 'vue';
 
 const sidebarStore = useSidebarStore();
+const userStore = useUserStore();
+
+const urlDaImagem:Ref<string | null> = ref<string | null>(null);
+
+onMounted(async ()=>{
+    
+    await userStore.setupPhoto();
+})
 
 </script>
 
@@ -32,7 +43,9 @@ const sidebarStore = useSidebarStore();
                 rounded-2xl
                 flex-4">
 
-                <slot></slot>
+                <slot>
+                    <img v-if="urlDaImagem" :src="urlDaImagem" alt="loading">
+                </slot>
             </div>
             </div>
             

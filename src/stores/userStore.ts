@@ -16,9 +16,9 @@ export const useUserStore = defineStore('user', ()=>{
         const payload = jwtDecode(token) as UserAPI;
 
         const member = parseUser(payload);
-
-        user.set(member);
         
+        user.set(member);
+
         localStorage.setItem('user', JSON.stringify(user));
 
         if(user.cargo === "MEMBRO"){
@@ -30,16 +30,39 @@ export const useUserStore = defineStore('user', ()=>{
         else if(user.cargo === "ADMINISTRADOR"){
             level.value = AuthLevel.ADMIN;
         }
+
+    }
+
+    async function setupPhoto() {
+
+        if (user.fotoURL === null){
+            
+            user.fotoURL = await memberService.getMemberPhoto(user.rga);
+        }
+
+    }
+
+    function photo(){
+        return user.fotoURL ? user.fotoURL : "/icon/sidebar/members.png";
     }
 
     function checkUser(){
         return user.rga.length > 0 && localStorage.getItem('user');
     }
 
+    function isDirector():boolean{
+        return level.value >= AuthLevel.DIRECTOR;
+    }
+
+    function isAdmin():boolean{
+        return level.value === AuthLevel.ADMIN;
+    }
+
     function clear(){
         user.clear()
         localStorage.removeItem('user');
+        localStorage.removeItem('userPhoto');
     }
 
-    return {user, level, checkUser, setUserFromToken, clear}
+    return {user, setupPhoto, photo, isDirector, isAdmin, checkUser, setUserFromToken, clear}
 });

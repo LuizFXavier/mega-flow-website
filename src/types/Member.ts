@@ -7,6 +7,8 @@ export class Member{
     diretoria:string ='';
     cargo:string ='';
 
+    fotoURL:string | null = null;
+
     set(member:Member){
         this.rga = member.rga;
         this.nome = member.nome;
@@ -22,6 +24,11 @@ export class Member{
         this.dataIngresso = '';
         this.diretoria = '';
         this.cargo = '';
+        this.fotoURL = '';
+    }
+
+    setFotoURL(url:string){
+        this.fotoURL = url;
     }
 }
 
