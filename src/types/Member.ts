@@ -25,6 +25,8 @@ export class Member{
     }
 }
 
+export type MemberMap = Map<string, Member>;
+
 export interface UserAPI{
     sub:string;
     cargo:string;
