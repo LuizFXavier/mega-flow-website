@@ -6,8 +6,11 @@ import { AuthLevel } from '@/types/AuthorizationLevel.ts';
 
 const userStore = useUserStore();
 
-function openCreateProjectModal(){
+const isModalOpen = defineModel<boolean>();
 
+function openCreateProjectModal(){
+    isModalOpen.value = true;
+    console.log(isModalOpen.value);
 }
 </script>
 
@@ -23,7 +26,7 @@ function openCreateProjectModal(){
                 </h1>
                 
             </div>
-            <div v-if="userStore.level >= AuthLevel.DIRECTOR"
+            <div v-if="userStore.isDirector()"
                 class ="w-1/10
                         h-full
                         flex
