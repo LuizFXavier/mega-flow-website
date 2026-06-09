@@ -25,6 +25,22 @@ export const memberService = {
         catch(e){
             throw e;
         }
+    },
+    async getMemberPhoto(rga:string){
+        try{
+            const response = await api.get('/membros/' + rga + '/foto', {
+                responseType: 'blob'
+            });
+            
+            const imageBlob: Blob = response.data;
+              
+            const imageUrl: string = URL.createObjectURL(imageBlob);
+            return imageUrl; 
+            
+        }
+        catch(e){
+            throw(e)
+        }
     }
     
 }
