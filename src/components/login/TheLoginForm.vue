@@ -11,7 +11,7 @@ const authStore = useAuthStore();
 
 const showPassword = ref<Boolean>(false);
 
-const user = reactive<LoginData>({email:'mateus@ufms.br', senha:'Mateus1234'});
+const user = reactive<LoginData>({email:'Jubileu@megaflow.com', senha:'JubileuAoMolho'});
 
 const router = useRouter();
 
