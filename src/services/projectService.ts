@@ -1,6 +1,6 @@
 import type { Participant } from "@/types/Participant";
 import api from "./api"
-import type { Project } from "@/types/Project";
+import type { Project, ProjectGroup } from "@/types/Project";
 
 export const projectService = {
   
@@ -15,6 +15,9 @@ export const projectService = {
         catch(e){
             throw e;
         }
+    },
+    async getProjectsWithMember()/*:Promise<ProjectGroup>*/{
+      // TODO  
     },
     async getAllProjects():Promise<Project[]> {
 
