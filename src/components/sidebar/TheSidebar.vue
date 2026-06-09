@@ -5,9 +5,12 @@ import { useAuthStore } from '@/stores/authStore.ts';
 import { ref } from 'vue';
 import type { SidebarEntry } from '@/types/SidebarEntry.ts';
 import { useSidebarStore } from '@/stores/sidebarStore.ts';
+import { useUserStore } from '@/stores/userStore.ts';
+import { memberService } from '@/services/memberService.ts';
 
 const authStore = useAuthStore();
 const sidebarStore = useSidebarStore();
+const userStore = useUserStore();
 const router = useRouter();
 
 const isSideBarOpen = defineModel<boolean>();
@@ -17,7 +20,7 @@ function handleLogout(){
     router.push('/login')
 }
 
-function toggleSidebar(){
+async function toggleSidebar(){
     sidebarStore.toggle();
 }
 
@@ -37,7 +40,7 @@ function toggleSidebar(){
                     justify-end
                     ">
 
-            <SidebarNav target-route="/projects" icon-url="/icon/sidebar/projects.png"/>
+            <SidebarNav target-route="/projects" :icon-url="userStore.photo()"/>
         </div>
 
         <SidebarNav target-route="/" 

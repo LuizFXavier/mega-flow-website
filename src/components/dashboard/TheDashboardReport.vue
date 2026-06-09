@@ -44,7 +44,8 @@ const statusMap = new Map<string, string>([
                 </h2>
             </div>
             
-            <div class="flex 
+            <div v-if="projects.length > 0"
+                class="flex 
                         p-3
                         w-1/2">
                 <TheSearchBar :text="'Buscar Projeto'"/>
