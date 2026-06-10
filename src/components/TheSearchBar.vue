@@ -4,6 +4,10 @@ interface Props{
 }
 const {text} = defineProps<Props>();
 
+const input = defineModel();
+
+const emit = defineEmits(['confirm'])
+
 </script>
 
 <template>
@@ -16,11 +20,13 @@ const {text} = defineProps<Props>();
         <img src="/icon/search.png"
              class="w-6 h-6"/>
 
-        <input type="text" 
+        <input v-model="input"
+               type="text"
                :placeholder="text"
                class="w-full h-8/10
                       px-1
-                      rounded-full"/>
+                      rounded-full"
+                @keypress.enter="emit('confirm')"/>
         <div class="w-6 h-6"></div>
     </section>
 </template>
