@@ -10,7 +10,6 @@ const isModalOpen = defineModel<boolean>();
 
 function openCreateProjectModal(){
     isModalOpen.value = true;
-    console.log(isModalOpen.value);
 }
 </script>
 

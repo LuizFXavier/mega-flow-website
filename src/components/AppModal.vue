@@ -6,18 +6,15 @@ interface Props{
 
 const props = defineProps<Props>();
 
-const isModalOpen = defineModel<boolean>()
 
-function closeModal(){
-    isModalOpen.value = false;
-}
+const emit = defineEmits(['close']);
 </script>
 
 <template>
   <Teleport to="body">
     
     <div
-      @click="closeModal()" 
+      @click="emit('close')"
       class = " fixed inset-0 z-50 
                 flex 
                 items-center justify-center 

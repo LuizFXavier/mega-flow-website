@@ -25,15 +25,17 @@ export const projectService = {
 
             data.forEach((element:any) => {
 
-                const project:Project = new Project(element);
+                const project:Project = new Project();
+
+                project.set(element);
                 
-                project.participants = [];
+                project.membros = [];
 
                 const membros:{membro:Member, funcao:string}[] = element.membros!;
 
                 membros.forEach((m)=>{
 
-                    project.participants.push({memberRga:m.membro.rga, funcao:m.funcao});
+                    project.membros.push({rga:m.membro.rga, funcao:m.funcao});
                     
                     projectGroup.membermap.set(m.membro.rga, m.membro);
                 })

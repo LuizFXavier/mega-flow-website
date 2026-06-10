@@ -14,6 +14,9 @@ const memberMap:MemberMap = new Map();
 
 onMounted(async ()=>{
     projectGroup.value = await projectService.getProjectsWithMembers();
+    const saas = await projectService.getAllProjects();
+
+    console.log(saas)
 })
 
 const isModalOpen = ref<boolean>(false);
@@ -24,10 +27,10 @@ const isModalOpen = ref<boolean>(false);
         <template v-slot:header>
             <TheProjectHeader v-model="isModalOpen"/>
         </template>
-        <TheProjectList :project-group="projectGroup"/>
+        <TheProjectList v-model="isModalOpen" :project-group="projectGroup"/>
     </BaseLayout>
 
     <article v-if="isModalOpen" class="">
-    <ProjectModal v-model="isModalOpen"/>
+    <ProjectModal :member-map="projectGroup.membermap" v-model="isModalOpen"/>
     </article>
 </template>
