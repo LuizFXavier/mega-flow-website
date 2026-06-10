@@ -2,22 +2,24 @@ import type { MemberMap } from "./Member";
 
 export class Project{
 
-    id:string;
-    titulo:string;
-    status:string;
+    id:string = '';
+    titulo:string = '';
+    status:string = '';
 
-    cliente:string;
+    cliente:string = '';
 
-    dataCriacao:string;
-    dataAtualizacao:string;
+    dataCriacao:string = '';
+    dataAtualizacao:string = '';
     dataConclusao:string | null = null;
-    descricao:string;
+    descricao:string = '';
 
-    liderRga:string;
+    orcamento:number = 0;
 
-    participants:ProjectParticipant[] = [];
+    liderRga:string = '';
 
-    constructor(project:any){
+    membros:ProjectParticipant[] = [];
+
+    set(project:any){
         this.id = project.id;
         this.titulo = project.titulo;
         this.status = project.status;
@@ -30,12 +32,14 @@ export class Project{
         this.dataConclusao = project.dataConclusao;
         this.descricao = project.descricao;
         this.liderRga = project.liderRga;
+
+        this.orcamento = project.orcamento;
     }
 }
 
 export interface ProjectParticipant{
     funcao:string;
-    memberRga:string;
+    rga:string;
 }
 
 export class ProjectGroup{
