@@ -41,6 +41,17 @@ export const memberService = {
         catch(e){
             throw(e)
         }
+    },
+
+    async searchMembersByName(name:string):Promise<Member[]>{
+        try{
+            const {data} = await api.get<Member[]>('/membros?nome=' + name);
+            
+            return data;
+        }
+        catch(e){
+            throw e;
+        }
     }
     
 }
