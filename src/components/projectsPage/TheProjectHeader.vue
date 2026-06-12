@@ -3,10 +3,29 @@ import { useUserStore } from '@/stores/userStore.ts';
 import TheHeader from '../TheHeader.vue';
 import TheSearchBar from '../TheSearchBar.vue';
 import { AuthLevel } from '@/types/AuthorizationLevel.ts';
+import { ref, watch, type Ref } from 'vue';
 
 const userStore = useUserStore();
 
 const isModalOpen = defineModel<boolean>();
+
+const emit = defineEmits<{
+  (e: 'search', input:string): void,
+  (e: 'clearSearch'): void
+}>();
+
+const searchInput:Ref<string> = ref<string>('');
+
+watch(searchInput, (newValue) => {
+
+  if (newValue.length === 0){
+    emit('clearSearch');
+  }
+})
+
+function search(){
+    emit('search', searchInput.value);
+}
 
 function openCreateProjectModal(){
     isModalOpen.value = true;
@@ -59,7 +78,9 @@ function openCreateProjectModal(){
                         p-3
                         h-full
                         w-1/3">
-                <TheSearchBar :text="'Buscar Projeto'"/>
+                <TheSearchBar :text="'Buscar Projeto'"
+                              v-model="searchInput"
+                              @confirm="search"/>
             </div>
         </template>
     </TheHeader>

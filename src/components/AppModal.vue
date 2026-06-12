@@ -28,7 +28,7 @@ const emit = defineEmits(['close']);
                   rounded-2xl 
                   shadow-xl 
                   border border-gray-border 
-                  flex flex-col gap-4 
+                  flex flex-col  
                   aspect-square
                   
                   py-2"

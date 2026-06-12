@@ -213,5 +213,39 @@ export const projectService = {
         catch(e){
             throw e;
         }
+    },
+    async searchProjectByTitle(title:string):Promise<Project[]>{
+
+        try{
+
+            const {data} = await api.get('/projetos?titulo=' + title);
+
+            const projects:Project[] = [];
+
+            data.forEach((element:any) => {
+
+                const project:Project = new Project();
+
+                project.set(element);
+                
+                project.membros = [];
+
+                const membros:{membro:Member, funcao:string}[] = element.membros!;
+
+                membros.forEach((m)=>{
+
+                    project.membros.push({rga:m.membro.rga, funcao:m.funcao});
+                    
+                })
+
+                projects.push(project);
+                
+            });
+            
+            return projects;
+        }
+        catch(e){
+            return [];
+        }
     }
 }

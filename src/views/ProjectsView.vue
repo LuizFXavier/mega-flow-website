@@ -10,32 +10,50 @@ import { onMounted, ref, type Ref } from 'vue';
 
 const projects:Ref<Project[]> = ref<Project[]>([]);
 
+const matchedProjects:Ref<Project[]> = ref<Project[]>([]);
+
 const memberStore = useMemberStore();
 
 function handleCreation(project:Project){
     projects.value.push(project);
 }
 
-function handleDelete(index:number){
-    projects.value.splice(index, 1);
+async function handleDelete(index:number){
+    matchedProjects.value.splice(index, 1);
+    projects.value = await projectService.getAllProjects();
 }
+
+async function handleSearch(input:string){
+    console.log(input)
+    matchedProjects.value = await projectService.searchProjectByTitle(input);
+}
+
+function clearSearch(){
+    matchedProjects.value = projects.value;
+}
+
+const isModalOpen = ref<boolean>(false);
 
 onMounted(async ()=>{
     projects.value = await projectService.getAllProjects();
+
+    matchedProjects.value = projects.value;
     
     await memberStore.setupMembers();
     await memberStore.setupMembersPhotos();
 })
 
-const isModalOpen = ref<boolean>(false);
 </script>
 
 <template>
     <BaseLayout>
         <template v-slot:header>
-            <TheProjectHeader v-model="isModalOpen"/>
+            <TheProjectHeader v-model="isModalOpen"
+                                @search="handleSearch"
+                                @clear-search="clearSearch"
+                                />
         </template>
-        <TheProjectList v-model="isModalOpen" :projects="projects"/>
+        <TheProjectList v-model="isModalOpen" :projects="matchedProjects"/>
     </BaseLayout>
 
     <article v-if="isModalOpen" class="">
