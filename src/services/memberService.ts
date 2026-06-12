@@ -39,7 +39,7 @@ export const memberService = {
             
         }
         catch(e){
-            throw(e)
+            return '/icon/sidebar/members.png';
         }
     },
 

@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <div class="w-full flex-1
+    <div class="w-full h-2/10
                 border border-gray-border
                 rounded-2xl">
         

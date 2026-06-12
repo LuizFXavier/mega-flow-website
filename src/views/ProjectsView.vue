@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import ProjectModal from '@/components/projectsPage/ProjectModal.vue';
+import ProjectModal from '@/components/projectsPage/modal/ProjectModal.vue';
 import TheProjectHeader from '@/components/projectsPage/TheProjectHeader.vue';
 import TheProjectList from '@/components/projectsPage/TheProjectList.vue';
 import BaseLayout from '@/layout/BaseLayout.vue';
 import { projectService } from '@/services/projectService';
+import { useMemberStore } from '@/stores/memberStore';
 import type { MemberMap } from '@/types/Member';
 import { ProjectGroup, type Project } from '@/types/Project';
 import { onMounted, ref, type Ref } from 'vue';
 
-const projectGroup:Ref<ProjectGroup> = ref<ProjectGroup>(new ProjectGroup());
+const projects:Ref<Project[]> = ref<Project[]>([]);
 
-const memberMap:MemberMap = new Map();
+const memberStore = useMemberStore();
 
 onMounted(async ()=>{
-    projectGroup.value = await projectService.getProjectsWithMembers();
-    const saas = await projectService.getAllProjects();
-
-    console.log(saas)
+    projects.value = await projectService.getAllProjects();
+    
+    await memberStore.setupMembers();
+    await memberStore.setupMembersPhotos();
 })
 
 const isModalOpen = ref<boolean>(false);
@@ -27,10 +28,10 @@ const isModalOpen = ref<boolean>(false);
         <template v-slot:header>
             <TheProjectHeader v-model="isModalOpen"/>
         </template>
-        <TheProjectList v-model="isModalOpen" :project-group="projectGroup"/>
+        <TheProjectList v-model="isModalOpen" :projects="projects"/>
     </BaseLayout>
 
     <article v-if="isModalOpen" class="">
-    <ProjectModal :member-map="projectGroup.membermap" v-model="isModalOpen"/>
+        <ProjectModal v-model="isModalOpen"/>
     </article>
 </template>

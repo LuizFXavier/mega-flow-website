@@ -1,6 +1,6 @@
 import type { Participant } from "@/types/Participant";
 import api from "./api"
-import { Project, ProjectGroup } from "@/types/Project";
+import { Project, ProjectGroup, type ProjectParticipant } from "@/types/Project";
 import type { Member } from "@/types/Member";
 
 export const projectService = {
@@ -54,8 +54,30 @@ export const projectService = {
 
         try{
             const {data} = await api.get('/projetos');
+
+            const projects:Project[] = [];
+
+            data.forEach((element:any) => {
+
+                const project:Project = new Project();
+
+                project.set(element);
+                
+                project.membros = [];
+
+                const membros:{membro:Member, funcao:string}[] = element.membros!;
+
+                membros.forEach((m)=>{
+
+                    project.membros.push({rga:m.membro.rga, funcao:m.funcao});
+                    
+                })
+
+                projects.push(project);
+                
+            });
             
-            return data;
+            return projects;
         }
         catch(e){
             throw e;
@@ -76,6 +98,75 @@ export const projectService = {
                 projects.push({funcao:"LEADER", projeto:p})
             });
             return projects;
+        }
+        catch(e){
+            throw e;
+        }
+    },
+
+    async createProject(project:Project){
+        try{
+            const membros:ProjectParticipant[] = [];
+
+            project.membros.forEach(m=>{
+                membros.push(m)
+            })
+            console.log(membros)
+            const creationPayload = {
+                titulo: project.titulo,
+                descricao: project.descricao,
+                cliente: project.cliente,
+                dataInicio: project.dataCriacao,
+                dataConclusao: project.dataConclusao,
+                status: project.status,
+                liderRga: project.liderRga,
+                orcamento: project.orcamento,
+                
+                membros: membros
+                };
+            await api.post('/projetos', creationPayload);
+        }
+        catch(e){
+            console.error("Falha ao criar o projeto:", e);
+            throw e;
+        }
+    },
+
+    async updateProject(project:Project, focusedProject:Project){
+
+        try{
+            const updatePayload = {
+                titulo: project.titulo,
+                descricao: project.descricao,
+                cliente: project.cliente,
+                dataConclusao: project.dataConclusao,
+                status: project.status,
+                orcamento: project.orcamento,
+                
+                };
+
+            await api.patch('/projetos/' + project.id, updatePayload);
+
+            if (project.liderRga !== focusedProject.liderRga){
+                const leaderPayload = {
+                    novoLiderRga: project.liderRga
+                };
+
+                await api.patch('/projetos/'+project.id+'/lider', leaderPayload);
+            }
+
+            focusedProject.set(project);
+            focusedProject.membros = project.membros;
+            
+            // TODO: Atualizar outras coisas
+        }
+        catch(e){
+            throw e;
+        }
+    },
+    async deleteProject(project:Project){
+        try{
+            await api.delete('/projetos/' + project.id);
         }
         catch(e){
             throw e;

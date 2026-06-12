@@ -20,13 +20,21 @@ const emit = defineEmits(['confirm'])
         <img src="/icon/search.png"
              class="w-6 h-6"/>
 
-        <input v-model="input"
-               type="text"
-               :placeholder="text"
-               class="w-full h-8/10
-                      px-1
-                      rounded-full"
-                @keypress.enter="emit('confirm')"/>
-        <div class="w-6 h-6"></div>
+        <form class="flex
+                    rounded-full
+                    place-items-center
+                    w-full h-full">
+
+            <input v-model="input"
+                type="text"
+                :placeholder="text"
+                class="w-full h-8/10
+                        px-1
+                        rounded-full"
+                    
+                    @keypress.enter.prevent="emit('confirm')"/>
+            <div class="w-6 h-6"></div>
+
+        </form>
     </section>
 </template>
