@@ -2,14 +2,15 @@
 import { computed, onMounted, reactive, ref, type Reactive, type Ref } from 'vue';
 import AppModal from '../../AppModal.vue';
 import ProjectFormInputBox from './ProjectFormInputBox.vue';
-import { Project } from '@/types/Project.ts';
+import { Project, type ProjectParticipant } from '@/types/Project.ts';
 import { useProjectStore } from '@/stores/projectStore.ts';
-import ProjectFormAddMember from './ProjectFormAddMember.vue';
+import ProjectFormMemberAddModal from './ProjectFormMemberAddModal.vue';
 import type { Member, MemberMap } from '@/types/Member.ts';
 import { useMemberStore } from '@/stores/memberStore.ts';
 import ProjectFormMember from './ProjectFormMember.vue';
 import FormButton from '@/components/FormButton.vue';
 import { projectService } from '@/services/projectService.ts';
+import { useUserStore } from '@/stores/userStore.ts';
 
 const statusMap = [
     ["CANCELADO", "Cancelado"],
@@ -35,23 +36,65 @@ function getMember(rga:string):Member{
     return memberStore.memberMap.get(rga)!
 }
 
+const projectMembers:Set<string> = new Set();
+const startingMembers:Map<string, ProjectParticipant> = new Map();
+
+const addedMembers:Set<string> = new Set();
+const modifiedMembers:Set<string> = new Set();
+const removedMembers:Set<string> = new Set();
+
+function addMember(rga:string){
+    
+    if(!startingMembers.has(rga)){
+        addedMembers.add(rga);
+    }
+    else{
+        formsProject.membros.push(startingMembers.get(rga)!);
+    }
+}
+
+function modifyMember(rga:string){
+    
+    if(startingMembers.has(rga)){
+        modifiedMembers.add(rga);
+    }
+}
+
 function removeMember(index:number){
 
-    const rga = formsProject.membros[index]?.rga;
+    const rga = formsProject.membros[index]!.rga;
+
+    if(startingMembers.has(rga)){
+        removedMembers.add(rga);
+    }
+    else{
+        addedMembers.delete(rga);
+    }
     projectMembers.delete(rga!)
     formsProject.membros.splice(index, 1);
 }
+
+const emit = defineEmits<{
+  (e: 'createProject', project: Project): void,
+  (e: 'deleteProject', index: number): void,
+}>();
 
 async function handleConfirm(){
 
     if(isNew.value){
         formsProject.dataCriacao = new Date().toISOString().split('T')[0]!;
         console.log(formsProject)
-        await projectService.createProject(formsProject);
+        const createdProject = await projectService.createProject(formsProject);
+
+        emit('createProject', createdProject);
     }
     else{
         console.log(formsProject)
-        await projectService.updateProject(formsProject, projectStore.focusedProject!);
+        await projectService.updateProject( formsProject, 
+                                            projectStore.focusedProject!,
+                                            addedMembers,
+                                            removedMembers,
+                                            modifiedMembers);
     }
     closeModal();
 }
@@ -59,14 +102,14 @@ async function handleConfirm(){
 async function handleDelete() {
     await projectService.deleteProject(formsProject);
 
+    emit('deleteProject', projectStore.focusedIndex);
     closeModal();
 }
 
 const formsProject:Reactive<Project> = reactive<Project>(new Project());
 
-const isNew:Ref<boolean> = ref<boolean>(false)
-
-const projectMembers:Set<string> = new Set();
+const isNew:Ref<boolean> = ref<boolean>(false);
+const canEdit:Ref<boolean> = ref<boolean>(false);
 
 const dataParaOInput = computed({
   get() {
@@ -82,18 +125,27 @@ const dataParaOInput = computed({
   }
 });
 
+const userStore = useUserStore();
+
 onMounted(()=>{
     if(projectStore.isValid()){
-        formsProject.set(projectStore.focusedProject)
+        formsProject.set(projectStore.focusedProject);
 
         formsProject.membros = [...projectStore.focusedProject!.membros];
 
         projectStore.focusedProject?.membros.forEach(membro => {
             projectMembers.add(membro.rga);
+            startingMembers.set(membro.rga, membro);
         });
+
+        if(userStore.isDirector() || formsProject.liderRga === userStore.user.rga){
+            canEdit.value = true;
+        }
     }
     else{
+        formsProject.status = 'NAO_INICIADO'
         isNew.value = true;
+        canEdit.value = true;
     }
     
 })
@@ -114,17 +166,19 @@ onMounted(()=>{
                         Novo projeto
                     </h1>
     
-                    <h1 v-else class="text-[#7E7979]">
+                    <h1 v-else-if="canEdit" class="text-[#7E7979]">
                         Editar projeto
                     </h1>
     
                     <input v-model="formsProject.titulo"
+                            :disabled="!canEdit"
                             type="text" 
                             placeholder="Digite o nome do projeto"
                             class="text-2xl"/>
                 </div>
                 <div class="flex place-items-end">
-                    <select v-model="formsProject.status">
+                    <select v-model="formsProject.status"
+                            :disabled="!canEdit">
                         <option v-for="entry in statusMap" :value="entry[0]">
                             {{ entry[1] }}</option>
                     </select>
@@ -149,6 +203,7 @@ onMounted(()=>{
                         </template>
 
                         <input v-model="formsProject.cliente"
+                                :disabled="!canEdit"
                                 type="text" 
                                 placeholder="Ex: Mega Jr" 
                                 class="placeholder-[#818181] 
@@ -164,6 +219,7 @@ onMounted(()=>{
                             </h2>
                         </template>
                         <input  v-model="dataParaOInput"
+                                :disabled="!canEdit"
                                 type="date"/>
                     </ProjectFormInputBox>
 
@@ -175,6 +231,7 @@ onMounted(()=>{
                             </h2>
                         </template>
                         <input  v-model="formsProject.orcamento"
+                                :disabled="!canEdit"
                                 type="number" min="0" step="0.01"/>
                     </ProjectFormInputBox>
                 </section>
@@ -192,6 +249,7 @@ onMounted(()=>{
                             
                         </template>
                         <textarea  v-model="formsProject.descricao"
+                                    :disabled="!canEdit"
                                     class="h-full w-full"></textarea>
                     </ProjectFormInputBox>
                 </section>
@@ -200,10 +258,13 @@ onMounted(()=>{
                                 w-full
                                 ">
                     <ProjectFormMember
+                        :can-edit="canEdit"
+                        :leader-rga="formsProject.liderRga"
                         v-model="formsProject.membros"
                         @change-role="console.log(formsProject)"
                         @open-modal="isAddMemberModalOpen = true"
                         @remove-member="removeMember"
+                        @modify-member="modifyMember"
                     />
                 </section>
                 
@@ -218,13 +279,15 @@ onMounted(()=>{
 
                     <select v-model="formsProject.liderRga"
                             class="min-w-1/4" 
+                            :disabled="!userStore.isDirector()"
                             >
                             <option v-for="member in formsProject.membros" 
                                             :value="member.rga">
                                 {{ getMember(member.rga).nome }}
                             </option>
                     </select>
-                    <button @click.prevent="handleDelete">
+                    <button @click.prevent="handleDelete"
+                            v-if="userStore.isDirector() && !isNew">
                         Deletar
                     </button>
                 </div>
@@ -242,11 +305,13 @@ onMounted(()=>{
                             bottom-4 right-0
                             w-1/3 h-1/3
                             mr-4">
-                <ProjectFormAddMember   v-model:project="formsProject"
-                                        v-model:projectMembers="projectMembers"/>
+                <ProjectFormMemberAddModal v-model:project="formsProject"
+                                        v-model:projectMembers="projectMembers"
+                                        @add-member="addMember"/>
             </div>
         </form>
-         <footer class="flex flex-row 
+         <footer v-if="canEdit"
+                 class="flex flex-row 
                         justify-center 
                         place-items-center
                         gap-10 bottom-0

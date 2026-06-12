@@ -124,7 +124,21 @@ export const projectService = {
                 
                 membros: membros
                 };
-            await api.post('/projetos', creationPayload);
+            const {data} = await api.post('/projetos', creationPayload);
+
+            const createdProject = new Project();
+            createdProject.set(data);
+
+            createdProject.membros = [];
+
+            const newMembers:{membro:Member, funcao:string}[] = data.membros!;
+
+            newMembers.forEach((m)=>{
+
+                createdProject.membros.push({rga:m.membro.rga, funcao:m.funcao});
+            })
+
+            return createdProject;
         }
         catch(e){
             console.error("Falha ao criar o projeto:", e);
@@ -132,7 +146,11 @@ export const projectService = {
         }
     },
 
-    async updateProject(project:Project, focusedProject:Project){
+    async updateProject(project:Project, 
+                        focusedProject:Project,
+                        addedMembers:Set<string>,
+                        removedMembers:Set<string>,
+                        modifiedMembers:Set<string>,){
 
         try{
             const updatePayload = {
@@ -157,6 +175,30 @@ export const projectService = {
 
             focusedProject.set(project);
             focusedProject.membros = project.membros;
+
+            const extraParticipants:ProjectParticipant[] = [];
+
+            if (addedMembers.size > 0 || modifiedMembers.size > 0){
+                
+                project.membros.forEach(async (member) => {
+
+                    if (addedMembers.has(member.rga)){
+                        extraParticipants.push(member);
+                    }
+                    else if(modifiedMembers.has(member.rga)){
+
+                        await api.patch('/projetos/' +project.id+ '/membros/' + member.rga, {funcao:member.funcao});
+                    }
+                });
+            }
+
+            if(extraParticipants.length > 0){
+                await api.post('/projetos/' +project.id+ '/membros', {membros:extraParticipants});
+            }
+
+            removedMembers.forEach(async (rga)=>{
+                await api.delete('/projetos/' +project.id+ '/membros/' + rga);
+            })
             
             // TODO: Atualizar outras coisas
         }

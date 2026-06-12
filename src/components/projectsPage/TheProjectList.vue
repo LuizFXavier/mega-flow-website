@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Project} from '@/types/Project';
 import ProjectCard from './ProjectCard.vue';
+import { useProjectStore } from '@/stores/projectStore.ts';
 
 interface Props{
     projects:Project[];
@@ -10,7 +11,10 @@ const {projects} = defineProps<Props>();
 
 const isModalOpen = defineModel<boolean>();
 
-function openViewModal(){
+const projectStore = useProjectStore();
+
+function openViewModal(project:Project, index:number){
+    projectStore.setFocusedProject(project, index);
     isModalOpen.value = true;
 }
 
@@ -25,8 +29,8 @@ function openViewModal(){
                     overflow-y-auto
                     ">
         
-        <ProjectCard @open-modal="openViewModal" 
-                    v-for="project in projects" 
+        <ProjectCard v-for="(project, index) in projects" 
+                    @open-modal="openViewModal(project, index)"
                     :project="project"/>
         
     </article>

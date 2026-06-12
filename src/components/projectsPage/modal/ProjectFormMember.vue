@@ -3,13 +3,19 @@ import { useMemberStore } from '@/stores/memberStore';
 import ProjectFormInputBox from "./ProjectFormInputBox.vue"
 import ProjectFormMemberCard from './ProjectFormMemberCard.vue';
 
+interface Props{
+    leaderRga:string;
+    canEdit:boolean;
+}
+
+const {canEdit, leaderRga} = defineProps<Props>();
 
 const members = defineModel<{funcao:string, rga:string}[]>();
 
 const emit = defineEmits<{
   (e: 'removeMember', id: number): void,
   (e: 'openModal'): void,
-  (e: 'changeRole'):void
+  (e: 'modifyMember', rga:string):void
 }>();
 
 const memberStore = useMemberStore();
@@ -19,6 +25,15 @@ const roleMap = new Map<string, string>([
     ["BACK_END", "Back-end"],
     ["DESIGN", "Designer"]
 ])
+
+function showDelete(rga:string):boolean{
+    
+    if (rga === leaderRga){
+        return false;
+    }
+
+    return canEdit;
+}
 
 
 </script>
@@ -36,7 +51,8 @@ const roleMap = new Map<string, string>([
                             Membros
                         </h2>
                     </div>
-                    <button class="place-self-end"
+                    <button v-if="canEdit"
+                            class="place-self-end"
                             type="button"
                             @click = "emit('openModal')">
                         + Adicionar
@@ -59,7 +75,8 @@ const roleMap = new Map<string, string>([
 
                     <select name="role" id="role" class=""
                             v-model="member.funcao"
-                            @change="emit('changeRole')">
+                            :disabled="!canEdit"
+                            @change="emit('modifyMember', member.rga)">
                             <option v-for="role in roleMap.keys()"
                                     :value="role">
 
@@ -68,7 +85,7 @@ const roleMap = new Map<string, string>([
                     </select>
 
                     <template v-slot:button>
-                        <button @click.prevent="emit('removeMember', index)">
+                        <button @click.prevent="emit('removeMember', index)" v-if="showDelete(member.rga)">
                             <img src="/icon/circle-x.png"/>
                         </button>
                     </template>

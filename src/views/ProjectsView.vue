@@ -5,13 +5,20 @@ import TheProjectList from '@/components/projectsPage/TheProjectList.vue';
 import BaseLayout from '@/layout/BaseLayout.vue';
 import { projectService } from '@/services/projectService';
 import { useMemberStore } from '@/stores/memberStore';
-import type { MemberMap } from '@/types/Member';
-import { ProjectGroup, type Project } from '@/types/Project';
+import { type Project } from '@/types/Project';
 import { onMounted, ref, type Ref } from 'vue';
 
 const projects:Ref<Project[]> = ref<Project[]>([]);
 
 const memberStore = useMemberStore();
+
+function handleCreation(project:Project){
+    projects.value.push(project);
+}
+
+function handleDelete(index:number){
+    projects.value.splice(index, 1);
+}
 
 onMounted(async ()=>{
     projects.value = await projectService.getAllProjects();
@@ -32,6 +39,9 @@ const isModalOpen = ref<boolean>(false);
     </BaseLayout>
 
     <article v-if="isModalOpen" class="">
-        <ProjectModal v-model="isModalOpen"/>
+        <ProjectModal v-model="isModalOpen"
+            @create-project="handleCreation"
+            @delete-project="handleDelete"
+            />
     </article>
 </template>

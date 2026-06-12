@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useMemberStore } from '@/stores/memberStore';
-import { useProjectStore } from '@/stores/projectStore';
 import type { MemberMap } from '@/types/Member';
 import type { Project } from '@/types/Project';
 
@@ -8,15 +6,11 @@ interface Props{
     project:Project;
 }
 
-const projectStore = useProjectStore();
-
 const {project} = defineProps<Props>();
 
 const emit = defineEmits(['openModal']);
 
 function handleClick(){
-
-    projectStore.setFocusedProject(project);
     emit('openModal');
 }
 

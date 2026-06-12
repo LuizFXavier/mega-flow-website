@@ -7,7 +7,7 @@ const {name, photoUrl} = defineProps<Props>();
 
 </script>
 <template>
-    <div class="border border-[#C2C2C2] rounded-xl
+    <div class="border border-[#C2C2C2] rounded-full
                 flex flex-row
                 place-items-center
                 gap-3

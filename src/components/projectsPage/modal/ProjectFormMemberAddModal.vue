@@ -19,6 +19,10 @@ const project = defineModel<Project>('project');
 
 const projectMembers = defineModel<Set<string>>('projectMembers');
 
+const emit = defineEmits<{
+  (e: 'addMember', rga: string): void
+}>();
+
 function addMemberToProject(rga:string){
 
   if(projectMembers.value?.has(rga))
@@ -27,6 +31,8 @@ function addMemberToProject(rga:string){
   project.value?.membros.push({rga:rga, funcao:''});
   
   projectMembers.value?.add(rga);
+
+  emit('addMember', rga);
 }
 
 watch(name, (newName) => {
