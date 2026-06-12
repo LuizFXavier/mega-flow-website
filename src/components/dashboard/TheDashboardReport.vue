@@ -7,10 +7,24 @@ import TheSearchBar from '../TheSearchBar.vue';
 const userStore = useUserStore();
 
 interface Props{
-    projects:Participant[]
+    projects:Participant[],
+    memberIsLeader:Set<string>
 }
 
-const {projects} = defineProps<Props>();
+const {projects, memberIsLeader} = defineProps<Props>();
+
+function getRole(participant:Participant):string{
+
+    let role = roleMap.get(participant.funcao)!;
+
+    const id = participant.projeto.id;
+
+    if(memberIsLeader!.has(id)){
+        role += '/Líder'
+    }
+
+    return role;
+}
 
 const roleMap = new Map<string, string>([
     ["LEADER", "Líder"],
@@ -69,7 +83,7 @@ const statusMap = new Map<string, string>([
             </thead>
             <tbody v-for="p in projects">
                 <DashboardReportItem :titulo="p.projeto.titulo"
-                                     :cargo="roleMap.get(p.funcao)!"
+                                     :cargo="getRole(p)"
                                      :andamento="statusMap.get(p.projeto.status)!"/>
             </tbody>
         </table>

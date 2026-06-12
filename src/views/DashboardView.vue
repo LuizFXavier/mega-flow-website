@@ -8,12 +8,16 @@ import type { Participant } from '@/types/Participant';
 import { projectService } from '@/services/projectService';
 import { useUserStore } from '@/stores/userStore';
 
-const projects:Ref<Participant[]> = ref<Participant[]>([]);
+const memberProjects:Ref<Participant[]> = ref<Participant[]>([]);
+const memberIsLeader:Ref<Set<string>> = ref<Set<string>>(new Set());
 
 const userStore = useUserStore();
 
 onMounted(async ()=>{
-    projects.value = await projectService.getMemberProjects(userStore.user.rga);
+    const {participant, isLeader}  = await projectService.getMemberProjects(userStore.user.rga);
+    
+    memberProjects.value = participant;
+    memberIsLeader.value = isLeader;
 })
 
 </script>
@@ -24,7 +28,7 @@ onMounted(async ()=>{
             <TheDashboardHeader/>
         </template>
 
-        <TheDashboardReport :projects="projects"/>
+        <TheDashboardReport :projects="memberProjects" :member-is-leader="memberIsLeader"/>
 
     </BaseLayout>
 </template>

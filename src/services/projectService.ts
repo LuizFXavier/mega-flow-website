@@ -84,7 +84,7 @@ export const projectService = {
         }
     },
     // Função que recupera os projetos que um membro participa, dado um rga
-    async getMemberProjects(rga:string):Promise<Participant[]> {
+    async getMemberProjects(rga:string):Promise<{participant:Participant[], isLeader:Set<string>}> {
 
         try{
             
@@ -94,10 +94,12 @@ export const projectService = {
             
             const projects:Participant[] = projetosParticipante;
             
+            const isLeader = new Set<string>()
+
             projetosLider.forEach((p:Project) => {
-                projects.push({funcao:"LEADER", projeto:p})
+                isLeader.add(p.id);
             });
-            return projects;
+            return {participant:projects, isLeader:isLeader};
         }
         catch(e){
             throw e;
