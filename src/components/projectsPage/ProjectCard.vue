@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import { useMemberStore } from '@/stores/memberStore';
 import { useProjectStore } from '@/stores/projectStore';
 import type { MemberMap } from '@/types/Member';
 import type { Project } from '@/types/Project';
 
 interface Props{
     project:Project;
-    memberMap:MemberMap;
 }
 
 const projectStore = useProjectStore();
 
-const {project, memberMap} = defineProps<Props>();
+const {project} = defineProps<Props>();
 
 const emit = defineEmits(['openModal']);
 

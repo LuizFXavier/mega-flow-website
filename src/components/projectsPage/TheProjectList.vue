@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { ProjectGroup } from '@/types/Project';
+import type { Project} from '@/types/Project';
 import ProjectCard from './ProjectCard.vue';
 
 interface Props{
-    projectGroup:ProjectGroup;
+    projects:Project[];
 }
 
-const {projectGroup} = defineProps<Props>();
+const {projects} = defineProps<Props>();
 
 const isModalOpen = defineModel<boolean>();
 
@@ -22,14 +22,12 @@ function openViewModal(){
                     gap-4
                     grid-rows-3
                     p-4
+                    overflow-y-auto
                     ">
-
+        
         <ProjectCard @open-modal="openViewModal" 
-                    v-for="project in projectGroup.projects" 
-                    :project="project" :member-map="projectGroup.membermap"/>
-        <!-- <ProjectCard v-for="project in projectGroup.projects" :project="project" :member-map="projectGroup.membermap"/> -->
-        <!-- <ProjectCard v-for="project in projectGroup.projects" :project="project" :member-map="projectGroup.membermap"/>
-        <ProjectCard v-for="project in projectGroup.projects" :project="project" :member-map="projectGroup.membermap"/> -->
+                    v-for="project in projects" 
+                    :project="project"/>
         
     </article>
 </template>

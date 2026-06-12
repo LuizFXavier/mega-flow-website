@@ -36,17 +36,19 @@ onMounted(async ()=>{
             <div class="h-95/100 w-full 
                         flex flex-col 
                         gap-2">
-            <slot name = "header"></slot>
-            
-            <div class="bg-white 
-                border border-gray-border
-                rounded-2xl
-                flex-4">
+                <slot name = "header"></slot>
+                
+                <div class="bg-white 
+                    border border-gray-border
+                    rounded-2xl
+                    flex-4
+                    h-8/10
+                    membros.push(m)">
 
-                <slot>
-                    <img v-if="urlDaImagem" :src="urlDaImagem" alt="loading">
-                </slot>
-            </div>
+                    <slot>
+                        <img v-if="urlDaImagem" :src="urlDaImagem" alt="loading">
+                    </slot>
+                </div>
             </div>
             
         </section>
