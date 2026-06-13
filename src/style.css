@@ -16,6 +16,7 @@ main{
   --color-mega-light: #8242D2;
   --color-mega-dark: #43226C;
   --color-gray-border: #E5E7EB;
+  --color-gray-main: #CCCCCC;
 }
 @theme {
   --font-inter: "Inter", sans-serif; 
