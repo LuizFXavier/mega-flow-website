@@ -318,10 +318,10 @@ onMounted(()=>{
                         py-5
                         min-h-3/20
                         ">
-            <FormButton preset="cancel" @click="closeModal">
+            <FormButton class="w-1/4" preset="cancel" @click="closeModal">
                 Cancelar
             </FormButton>
-            <FormButton preset="confirm" @click="handleConfirm">
+            <FormButton class="w-1/4" preset="confirm" @click="handleConfirm">
                 Salvar
             </FormButton>
         </footer>

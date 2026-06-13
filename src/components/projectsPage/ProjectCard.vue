@@ -102,9 +102,9 @@ function formatDate(date: string | null | undefined): string {
                     flex-1 flex flex-row">
             <MemberPhoto v-for="member in visibleMembers"
                          :photo-url="memberStore.getPhoto(member.rga)"
-                         class="bg-[#CCCCCC]"/>
+                         class="bg-gray-main"/>
             <div v-if="extraMembers > 0"
-                 class="bg-[#CCCCCC]
+                 class="bg-gray-main
                         aspect-square
                         rounded-full
                         flex justify-center

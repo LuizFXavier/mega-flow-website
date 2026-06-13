@@ -24,7 +24,6 @@ const btnCollor = computed(()=>{
             class="text-white
                     rounded-sm
                     text-2xl
-                    w-1/4
                     h-full
                     shadow-2xl
                     ">

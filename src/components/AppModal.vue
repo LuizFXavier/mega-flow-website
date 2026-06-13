@@ -30,8 +30,7 @@ const emit = defineEmits(['close']);
                   border border-gray-border 
                   flex flex-col  
                   aspect-square
-                  
-                  py-2"
+                  "
       >
         
       <slot></slot>

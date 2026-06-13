@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import TheMemberCreateModal from '@/components/membersPage/modal/TheMemberCreateModal.vue';
 import TheMemberHeader from '@/components/membersPage/TheMemberHeader.vue';
 import TheMemberList from '@/components/membersPage/TheMemberList.vue';
 import BaseLayout from '@/layout/BaseLayout.vue';
 import { useMemberStore } from '@/stores/memberStore';
 import { useProjectStore } from '@/stores/projectStore';
-import { onMounted } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 
 const memberStore = useMemberStore();
 
 const projectStore = useProjectStore();
+
+const isCreateModalOpen:Ref<boolean> = ref<boolean>(false);
 
 onMounted(async ()=>{
     
@@ -23,9 +26,11 @@ onMounted(async ()=>{
 <template>
     <BaseLayout>
         <template v-slot:header>
-            <TheMemberHeader/>
+            <TheMemberHeader
+                @open-create-modal="isCreateModalOpen = true"/>
         </template>
 
         <TheMemberList/>
     </BaseLayout>
+    <TheMemberCreateModal @close="isCreateModalOpen = false" v-if="isCreateModalOpen"/>
 </template>

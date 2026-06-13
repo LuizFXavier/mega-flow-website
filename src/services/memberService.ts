@@ -1,4 +1,4 @@
-import { Member } from "@/types/Member";
+import { CreatedMember, Member } from "@/types/Member";
 import api from "./api";
 import type { Project } from "@/types/Project";
 
@@ -84,4 +84,23 @@ export const memberService = {
       throw e;
     }
   },
+  async createMember(member:CreatedMember){
+    try{
+      let date:Date = new Date(member.dataIngresso);
+
+      const m = {
+        "rga": member.rga,
+        "nome": member.nome,
+        "email": member.email,
+        "senha": member.senha,
+        "diretoria": member.diretoria,
+        "cargo": member.cargo,
+        "dataIngresso": date.toISOString()
+      }
+      await api.post('/membros', m);
+    }
+    catch(e){
+      throw e;
+    }
+  }
 };

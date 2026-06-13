@@ -45,6 +45,16 @@ export interface MemberProject{
   funcao:string;
 }
 
+export class CreatedMember{
+  rga: string = "";
+  nome: string = "";
+  email: string = "";
+  dataIngresso: string = "";
+  diretoria: string = "A_DEFINIR";
+  cargo: string = "MEMBRO";
+  senha: string = "";
+}
+
 export interface UserAPI {
   sub: string;
   cargo: string;
