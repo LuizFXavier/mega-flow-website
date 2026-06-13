@@ -42,6 +42,7 @@ export interface UserAPI {
   nome: string;
   diretoria: string;
   dataIngresso: string;
+  dataDesligamento:string;
   email: string;
 }
 
