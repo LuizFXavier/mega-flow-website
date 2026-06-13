@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', ()=>{
     }
 
     function photo(){
-        return user.fotoURL ? user.fotoURL : "/icon/sidebar/members.png";
+        return user.fotoURL ? user.fotoURL : "/icon/user.png";
     }
 
     function checkUser(){
