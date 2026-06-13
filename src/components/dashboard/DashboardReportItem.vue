@@ -4,9 +4,22 @@ interface Props{
     titulo:string;
     cargo:string;
     andamento:string;
+    dataAtualizacao:string;
 }
 
 const props = defineProps<Props>();
+
+function updatedAt(dataAtualizacao: string) {
+    const today = new Date();
+    const updatedDate = new Date(dataAtualizacao);
+    const diffTime = Math.abs(today.getTime() - updatedDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays < 2) {
+        return "Atualizado hoje";
+    } else {
+        return `Atualizado ${diffDays} dia${diffDays !== 1 ? "s" : ""} atrás`;
+    }
+}
 
 </script>
 <template>
@@ -22,7 +35,7 @@ const props = defineProps<Props>();
             </h1>
             <h2 class= "text-gray-500
                         text-[0.95rem]">
-                Atualizado hoje
+                {{ updatedAt(props.dataAtualizacao) }}
             </h2>
         </td>
         <td class= "text-center text-gray-700">

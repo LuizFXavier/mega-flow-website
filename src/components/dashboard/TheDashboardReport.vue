@@ -84,7 +84,8 @@ const statusMap = new Map<string, string>([
             <tbody v-for="p in projects">
                 <DashboardReportItem :titulo="p.projeto.titulo"
                                      :cargo="getRole(p)"
-                                     :andamento="statusMap.get(p.projeto.status)!"/>
+                                     :andamento="statusMap.get(p.projeto.status)!"
+                                     :dataAtualizacao="p.projeto.dataAtualizacao"/>
             </tbody>
         </table>
         <div v-else class= "w-full h-full
