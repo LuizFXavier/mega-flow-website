@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import TheHeader from '@/components/TheHeader.vue';
 import TheMemberHeader from '@/components/membersPage/TheMemberHeader.vue';
-import TheSidebar from '@/components/sidebar/TheSidebar.vue';
+import TheMemberList from '@/components/membersPage/TheMemberList.vue';
 import BaseLayout from '@/layout/BaseLayout.vue';
-import { memberService } from '@/services/memberService';
+import { useMemberStore } from '@/stores/memberStore';
+import { useProjectStore } from '@/stores/projectStore';
 import { onMounted } from 'vue';
 
-onMounted(async ()=>{
-    const members = await memberService.getAllMembers();
+const memberStore = useMemberStore();
 
-    console.log(members);
+const projectStore = useProjectStore();
+
+onMounted(async ()=>{
+    
+    // Primeiro recuperar os projetos para que tenha o que se percorrer quando os membros carregarem
+    await projectStore.setupProjects();
+
+    await memberStore.setupMembers();
+    await memberStore.setupMembersPhotos();
 })
 </script>
 
@@ -19,5 +26,6 @@ onMounted(async ()=>{
             <TheMemberHeader/>
         </template>
 
+        <TheMemberList/>
     </BaseLayout>
 </template>

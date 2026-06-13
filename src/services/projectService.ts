@@ -1,6 +1,6 @@
 import type { Participant } from "@/types/Participant";
 import api from "./api"
-import { Project, ProjectGroup, type ProjectParticipant } from "@/types/Project";
+import { Project, type ProjectParticipant } from "@/types/Project";
 import type { Member } from "@/types/Member";
 
 export const projectService = {
@@ -17,39 +17,7 @@ export const projectService = {
             throw e;
         }
     },
-    async getProjectsWithMembers():Promise<ProjectGroup>{
-        try{
-            const {data} = await api.get('/projetos');
-
-            const projectGroup:ProjectGroup = new ProjectGroup();
-
-            data.forEach((element:any) => {
-
-                const project:Project = new Project();
-
-                project.set(element);
-                
-                project.membros = [];
-
-                const membros:{membro:Member, funcao:string}[] = element.membros!;
-
-                membros.forEach((m)=>{
-
-                    project.membros.push({rga:m.membro.rga, funcao:m.funcao});
-                    
-                    projectGroup.membermap.set(m.membro.rga, m.membro);
-                })
-
-                projectGroup.projects.push(project);
-                
-            });
-            
-            return projectGroup;
-        }
-        catch(e){
-            throw e;
-        }
-    },
+    
     async getAllProjects():Promise<Project[]> {
 
         try{
@@ -94,7 +62,7 @@ export const projectService = {
             
             const projects:Participant[] = projetosParticipante;
             
-            const isLeader = new Set<string>()
+            const isLeader = new Set<string>();
 
             projetosLider.forEach((p:Project) => {
                 isLeader.add(p.id);

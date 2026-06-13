@@ -9,6 +9,8 @@ export class Member {
 
   fotoURL: string | null = null;
 
+  projects:MemberProject[] = [];
+
   set(member: Member) {
     this.rga = member.rga;
     this.nome = member.nome;
@@ -27,6 +29,8 @@ export class Member {
     this.diretoria = "";
     this.cargo = "";
     this.fotoURL = "";
+
+    this.projects = [];
   }
 
   setFotoURL(url: string) {
@@ -35,6 +39,11 @@ export class Member {
 }
 
 export type MemberMap = Map<string, Member>;
+
+export interface MemberProject{
+  id:string;
+  funcao:string;
+}
 
 export interface UserAPI {
   sub: string;

@@ -10,9 +10,11 @@ export const useMemberStore = defineStore('member', () => {
 
     async function setupMembers(){
         
+        console.log(memberMap.size)
         if (memberMap.size > 0)
             return;
 
+        console.log(memberMap)
         const members:Member[] = await memberService.getAllMembers();
 
         members.forEach(member =>{
@@ -22,6 +24,9 @@ export const useMemberStore = defineStore('member', () => {
 
     async function setupMembersPhotos() {
 
+        if (photoMap.size > 0)
+            return;
+        
         memberMap.forEach(async (member, rga) =>{
             const photoUrl:string = await memberService.getMemberPhoto(rga);
             photoMap.set(rga, photoUrl);
@@ -37,19 +42,13 @@ export const useMemberStore = defineStore('member', () => {
             return photoUrl!;
         }
         else{
-            return '/icon/sidebar/members.png';
+            return '/icon/user.png';
         }
     }
 
     function getMemberArray():Member[]{
 
-        const members:Member[] = []
-
-        memberMap.forEach((member)=>{
-            members.push(member);
-        })
-
-        return members;
+        return Array.from(memberMap.values());
     }
 
     function getMember(rga:string):Member{

@@ -5,6 +5,7 @@ import TheProjectList from '@/components/projectsPage/TheProjectList.vue';
 import BaseLayout from '@/layout/BaseLayout.vue';
 import { projectService } from '@/services/projectService';
 import { useMemberStore } from '@/stores/memberStore';
+import { useProjectStore } from '@/stores/projectStore';
 import { type Project } from '@/types/Project';
 import { onMounted, ref, type Ref } from 'vue';
 
@@ -34,13 +35,18 @@ function clearSearch(){
 
 const isModalOpen = ref<boolean>(false);
 
-onMounted(async ()=>{
-    projects.value = await projectService.getAllProjects();
+const projectStore = useProjectStore();
 
-    matchedProjects.value = projects.value;
+onMounted(async ()=>{
     
+    // Primeiro recuperar os membros para que tenha o que se percorrer quando os projetos carregarem
     await memberStore.setupMembers();
     await memberStore.setupMembersPhotos();
+
+    await projectStore.setupProjects();
+    
+    projects.value = projectStore.getProjectArray();
+    matchedProjects.value = projects.value;
 })
 
 </script>

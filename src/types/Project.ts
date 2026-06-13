@@ -1,5 +1,3 @@
-import type { MemberMap } from "./Member";
-
 export class Project{
 
     id:string = '';
@@ -37,12 +35,9 @@ export class Project{
     }
 }
 
+export type ProjectMap = Map<string, Project>;
+
 export interface ProjectParticipant{
     funcao:string;
     rga:string;
-}
-
-export class ProjectGroup{
-    projects:Project[] = [];
-    membermap:MemberMap = new Map();
 }

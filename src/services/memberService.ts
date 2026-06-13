@@ -1,5 +1,6 @@
 import { Member } from "@/types/Member";
 import api from "./api";
+import type { Project } from "@/types/Project";
 
 export const memberService = {
   // Função que recupera as informações de um membro dado um rga
@@ -13,10 +14,34 @@ export const memberService = {
     }
   },
   async getAllMembers(): Promise<Member[]> {
+    
     try {
       const { data } = await api.get<Member[]>("/membros");
 
-      return data;
+      const members:Member[] = [];
+      
+      data.forEach((element:any) => {
+
+          const member:Member = new Member();
+
+          member.set(element);
+          
+          member.projects = [];
+
+          const projects:{projeto:Project, funcao:string}[] = element.projetosParticipante!;
+
+          projects.forEach((p)=>{
+
+              member.projects.push({id:p.projeto.id, funcao:p.funcao});
+              
+          })
+
+          members.push(member);
+          
+      });
+      
+      
+      return members;
     } catch (e) {
       throw e;
     }
@@ -32,7 +57,7 @@ export const memberService = {
       const imageUrl: string = URL.createObjectURL(imageBlob);
       return imageUrl;
     } catch (e) {
-      return "/icon/sidebar/members.png";
+      return "/icon/user.png";
     }
   },
 
