@@ -2,7 +2,7 @@
 
 interface Props{
     type:string;
-    placeholder:string;
+    placeholder?:string;
 }
 
 const {type, placeholder} = defineProps<Props>();
@@ -16,8 +16,11 @@ const value = defineModel();
             v-model="value"
             class= "w-full 
                     rounded-lg
-                    text-lg
-                    p-2
+                    text-base
+                    2xl:text-lg
+                    px-2
+                    py-1
+                    2xl:py-2
                     bg-[#F5F5F5]
                     shadow-2xl"/>
 </template>

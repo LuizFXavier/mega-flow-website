@@ -4,6 +4,7 @@ import MemberPhoto from '../MemberPhoto.vue';
 import { useMemberStore } from '@/stores/memberStore';
 import { computed, onMounted } from 'vue';
 import { useProjectStore } from '@/stores/projectStore.ts';
+import { useUserStore } from '@/stores/userStore.ts';
 
 interface Props{
     member:Member;
@@ -24,6 +25,12 @@ const diretoriaMap = new Map<string, string>([
 const memberStore = useMemberStore();
 const projectStore = useProjectStore();
 
+const emit = defineEmits(['openModal', 'openEditModal']);
+
+function handleClick(){
+    emit('openModal');
+}
+
 const visibleProjects = computed(()=>{
     return member.projects.slice(0,3);
 })
@@ -32,9 +39,17 @@ function getProject(id:string){
     return projectStore.getProject(id);
 }
 
+function openEditModal(){
+    console.log("card")
+    emit('openEditModal')
+}
+
+const userStore = useUserStore();
+
+
 </script>
 <template>
-    <div class="bg-[#CCCCCC]/50
+    <div class="bg-gray-main/50
                 border
                 border-[#B1B1B1]
                 rounded-xl
@@ -46,11 +61,22 @@ function getProject(id:string){
                 relative
                 flex flex-col
                 place-items-center
-                ">
+                "
+                @click="handleClick">
         <div class="w-full h-1/6
                     absolute
                     bg-linear-to-r from-mega-light to-mega-dark
-                    rounded-t-xl">
+                    rounded-t-xl
+                    justify-end
+                    place-items-start
+                    p-2
+                    flex
+                    ">
+                
+                <button v-if="userStore.isAdmin()"
+                     @click.stop="openEditModal">
+                    <img src="/icon/edit-orange.png"/>
+                </button>
         </div>
 
         <section class="absolute 

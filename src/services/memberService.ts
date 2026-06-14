@@ -65,7 +65,31 @@ export const memberService = {
     try {
       const { data } = await api.get<Member[]>("/membros?nome=" + name);
 
-      return data;
+      const members:Member[] = [];
+      
+      data.forEach((element:any) => {
+
+          const member:Member = new Member();
+
+          member.set(element);
+          
+          member.projects = [];
+
+          const projects:{projeto:Project, funcao:string}[] = element.projetosParticipante!;
+
+          projects.forEach((p)=>{
+
+              member.projects.push({id:p.projeto.id, funcao:p.funcao});
+              
+          })
+
+          members.push(member);
+          
+      });
+      
+      
+      return members;
+
     } catch (e) {
       throw e;
     }
@@ -73,9 +97,9 @@ export const memberService = {
   async updateMemberPhoto(rga: string, photo: File | Blob): Promise<void> {
     try {
       const formData = new FormData();
-      formData.append("photo", photo);
+      formData.append("foto", photo);
 
-      await api.put(`/membros/${rga}/foto`, formData, {
+      await api.patch(`/membros/${rga}/foto`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -102,5 +126,56 @@ export const memberService = {
     catch(e){
       throw e;
     }
-  }
+  },
+
+  async updateMember(member:CreatedMember):Promise<boolean>{
+
+    try{
+      let date:Date = new Date(member.dataIngresso);
+
+      const m = {
+        "rga": member.rga,
+        "nome": member.nome,
+        "email": member.email,
+        "senha": member.senha,
+        "diretoria": member.diretoria,
+        "cargo": member.cargo,
+        "dataIngresso": date.toISOString()
+      }
+      await api.patch('/membros/' + member.rga, m);
+
+      return true;
+    }
+    catch(e){
+      return false;
+    }
+  },
+
+  async updateMemberPassword(rga:string, oldPassword:string, newPassword:string){
+
+    if(oldPassword.length === 0 || newPassword.length === 0)
+      return;
+
+    try{
+
+      const payload = {
+        "senhaAtual":oldPassword,
+        "novaSenha": newPassword,
+      };
+
+      await api.patch('/membros/' + rga, payload);
+    }
+    catch(e){
+      throw e;
+    }
+  },
+  async deleteMember(rga:String){
+        try{
+            await api.delete('/membros/' + rga);
+            
+        }
+        catch(e){
+            throw e;
+        }
+    }
 };

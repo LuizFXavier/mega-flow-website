@@ -20,6 +20,13 @@ export class Member {
     this.diretoria = member.diretoria;
     this.cargo = member.cargo;
   }
+  update(member: CreatedMember){
+      this.nome = member.nome;
+      this.email = member.email;
+      this.dataIngresso = member.dataIngresso;
+      this.diretoria = member.diretoria;
+      this.cargo = member.cargo;
+  }
   clear() {
     this.rga = "";
     this.nome = "";
@@ -53,6 +60,18 @@ export class CreatedMember{
   diretoria: string = "A_DEFINIR";
   cargo: string = "MEMBRO";
   senha: string = "";
+
+  constructor(member?:Member){
+    if (!member)
+      return;
+
+    this.rga = member.rga;
+    this.nome = member.nome;
+    this.email = member.email;
+    this.dataIngresso = member.dataIngresso;
+    this.diretoria = member.diretoria;
+    this.cargo = member.cargo;
+  }
 }
 
 export interface UserAPI {

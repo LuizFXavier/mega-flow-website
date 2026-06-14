@@ -1,14 +1,34 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore.ts';
 import TheHeader from '../TheHeader.vue';
+import { ref, watch, type Ref } from 'vue';
+import TheSearchBar from '../TheSearchBar.vue';
 
 const userStore = useUserStore();
 
-const emit = defineEmits(['openCreateModal']);
+const emit = defineEmits<{
+  (e: 'search', input:string): void,
+  (e: 'clearSearch'): void,
+  (e: 'openCreateModal'):void
+}>();
+
+const searchInput:Ref<string> = ref<string>('');
+
+watch(searchInput, (newValue) => {
+
+  if (newValue.length === 0){
+    emit('clearSearch');
+  }
+})
+
+function search(){
+    emit('search', searchInput.value);
+}
 
 function openCreateUserModal(){
     emit('openCreateModal')
 }
+
 </script>
 
 <template>
@@ -19,7 +39,7 @@ function openCreateUserModal(){
                 <h1 class="text-white text-4xl
                             font-inter
                             ">
-                    Mega-membros
+                    Membros
                 </h1>
                 
             </div>
@@ -48,6 +68,17 @@ function openCreateUserModal(){
                 </button>
 
 
+            </div>
+        </template>
+        <template v-slot:bottom>
+            <div class="flex 
+                        justify-center
+                        p-3
+                        h-full
+                        w-1/3">
+                <TheSearchBar :text="'Buscar Membro'"
+                              v-model="searchInput"
+                              @confirm="search"/>
             </div>
         </template>
     </TheHeader>

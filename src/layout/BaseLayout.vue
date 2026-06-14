@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import TheSidebar from '@/components/sidebar/TheSidebar.vue';
+import TheProfileEditModal from '@/components/TheProfileEditModal.vue';
 import { memberService } from '@/services/memberService';
+import { useMemberStore } from '@/stores/memberStore';
 import { useSidebarStore } from '@/stores/sidebarStore';
 import { useUserStore } from '@/stores/userStore';
 import { onMounted, ref, type Ref } from 'vue';
@@ -9,6 +11,12 @@ const sidebarStore = useSidebarStore();
 const userStore = useUserStore();
 
 const urlDaImagem:Ref<string | null> = ref<string | null>(null);
+
+const isEditProfileModalOpen:Ref<boolean> = ref<boolean>(false);
+
+function openProfileEditModal(){
+    isEditProfileModalOpen.value = true
+}
 
 onMounted(async ()=>{
     
@@ -25,7 +33,7 @@ onMounted(async ()=>{
                         content-center
                          "
                  :class="{'w-10/200':!sidebarStore.state, 'w-30/200':sidebarStore.state}">
-            <TheSidebar/>
+            <TheSidebar @openProfileEdit="isEditProfileModalOpen = true"/>
         </section>
         <section class="h-full
                         items-center
@@ -45,13 +53,17 @@ onMounted(async ()=>{
                     h-8/10
                     membros.push(m)">
 
-                    <slot>
-                        <img v-if="urlDaImagem" :src="urlDaImagem" alt="loading">
+                    <slot :openEditModal="openProfileEditModal">
+                        
                     </slot>
                 </div>
             </div>
             
         </section>
         
-    </div> 
+    </div>
+
+    <TheProfileEditModal v-if="isEditProfileModalOpen"
+                         @close="isEditProfileModalOpen = false"/>
+
 </template>

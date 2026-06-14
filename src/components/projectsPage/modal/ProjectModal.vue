@@ -287,7 +287,15 @@ onMounted(()=>{
                             </option>
                     </select>
                     <button @click.prevent="handleDelete"
-                            v-if="userStore.isDirector() && !isNew">
+                            v-if="userStore.isDirector() && !isNew"
+                            class="flex flex-row 
+                                    bg-[#5C0099]
+                                    text-white
+                                    place-items-center
+                                    px-2
+                                    py-1
+                                    rounded-xl">
+                        <img src="/icon/trash.png"/>
                         Deletar
                     </button>
                 </div>

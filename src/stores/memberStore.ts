@@ -1,4 +1,4 @@
-import { reactive, type Reactive} from 'vue'
+import { reactive, ref, type Reactive, type Ref} from 'vue'
 import { defineStore } from 'pinia'
 import type { Member, MemberMap } from '@/types/Member';
 import { memberService } from '@/services/memberService';
@@ -7,6 +7,19 @@ export const useMemberStore = defineStore('member', () => {
 
     const memberMap:Reactive<MemberMap> = reactive<MemberMap>(new Map());
     const photoMap:Reactive<Map<string, string>> = reactive<Map<string,string>>(new Map());
+
+    const focusedMember:Ref<Member | null> = ref<Member | null>(null);
+    const focusedIndex:Ref<number> = ref<number>(-1);
+
+    function setFocusedMember(member:Member, index:number){
+            focusedMember.value = member;
+            focusedIndex.value = index;
+    }
+
+    function reset(){
+        focusedIndex.value = -1;
+        focusedMember.value = null;
+    }
 
     async function setupMembers(){
         
@@ -56,9 +69,13 @@ export const useMemberStore = defineStore('member', () => {
         return memberMap.get(rga)!;
     }
 
-    return {memberMap, 
+    return {memberMap,
+            focusedMember,
+            focusedIndex,
+            setFocusedMember,
+            reset,
             setupMembers, 
-            setupMembersPhotos, 
+            setupMembersPhotos,
             getPhoto, 
             getMemberArray,
             getMember}

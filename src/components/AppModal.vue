@@ -1,10 +1,13 @@
 <script setup lang="ts">
 
-interface Props{
-    title?:string;
+interface Props {
+    title?: string;
+    boxClass?: string; 
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    boxClass: 'h-85/100 aspect-square bg-white '
+});
 
 
 const emit = defineEmits(['close']);
@@ -23,14 +26,12 @@ const emit = defineEmits(['close']);
     >
       
       <div @click.stop 
-          class="bg-white 
-                  h-85/100 
-                  rounded-2xl 
+          class=" rounded-2xl 
                   shadow-xl 
                   border border-gray-border 
                   flex flex-col  
-                  aspect-square
                   "
+          :class="props.boxClass"
       >
         
       <slot></slot>
