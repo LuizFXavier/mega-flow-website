@@ -108,7 +108,7 @@ export const memberService = {
       throw e;
     }
   },
-  async createMember(member:CreatedMember){
+  async createMember(member:CreatedMember):Promise<Member>{
     try{
       let date:Date = new Date(member.dataIngresso);
 
@@ -121,7 +121,15 @@ export const memberService = {
         "cargo": member.cargo,
         "dataIngresso": date.toISOString()
       }
-      await api.post('/membros', m);
+      const {data} = await api.post('/membros', m);
+
+      const newMember:Member = new Member();
+
+      newMember.set(data);
+      
+      newMember.projects = [];
+
+      return newMember;
     }
     catch(e){
       throw e;

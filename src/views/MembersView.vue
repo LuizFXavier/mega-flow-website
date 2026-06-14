@@ -30,11 +30,6 @@ function handleCreation(member:Member){
     members.value.push(member);
 }
 
-function handleUpdate(newMember:CreatedMember){
-    
-    memberStore.reset();
-}
-
 async function handleDelete(index:number){
     matchedMembers.value.splice(index, 1);
     members.value = await memberService.getAllMembers();
@@ -84,7 +79,8 @@ onMounted(async ()=>{
                         @open-edit-modal="openEditModal"/>
         
     </BaseLayout>
-    <TheMemberCreateModal @close="isCreateModalOpen = false" v-if="isCreateModalOpen"/>
+    <TheMemberCreateModal @close="isCreateModalOpen = false" v-if="isCreateModalOpen"
+                            @create-member="handleCreation"/>
 
     <TheMemberDetailModal @close="isDetailModalOpen = false" v-if="isDetailModalOpen"/>
 

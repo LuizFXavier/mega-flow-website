@@ -3,10 +3,13 @@ import AppModal from '@/components/AppModal.vue';
 import FormButton from '@/components/FormButton.vue';
 import InputField from '@/components/InputField.vue';
 import { memberService } from '@/services/memberService';
-import { CreatedMember } from '@/types/Member';
+import { CreatedMember, Member } from '@/types/Member';
 import { reactive } from 'vue';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits<{
+  (e: 'createMember', member: Member): void,
+  (e: 'close'): void,
+}>();
 
 const diretoriaMap = new Map<string, string>([
     ["A_DEFINIR", "A definir"],
@@ -33,9 +36,11 @@ const formsMember = reactive<CreatedMember>(new CreatedMember());
 
 async function handleConfirm(){
 
-    console.log(formsMember);
+    const createdMember = await memberService.createMember(formsMember);
 
-    await memberService.createMember(formsMember);
+    emit('createMember', createdMember);
+
+    closeModal();
 }
 
 </script>
