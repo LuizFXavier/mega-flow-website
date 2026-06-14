@@ -3,6 +3,10 @@
 ## Site
 https://mega-flow-website.vercel.app
 
+### Usuário de teste:
+- e-mail: Jubileu@megaflow.com
+- senha: JubileuAoMolho
+
 ## Ambiente de desenvolvimento
 
 ```bash
