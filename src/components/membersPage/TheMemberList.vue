@@ -6,13 +6,6 @@ import { Member } from '@/types/Member';
 
 const memberStore = useMemberStore();
 
-// const members = ref<Member[]>([]);
-
-// watch(memberStore.memberMap, () => {
-
-//   members.value = memberStore.getMemberArray();
-// })
-
 interface Props {
     members: Member[];
 }
@@ -36,6 +29,15 @@ const visibleMembers = computed(() => {
         actualPage.value * page_items,
     );
 });
+
+watch(visibleMembers, (value) => {
+
+  if (value.length === 0){
+  
+    if(actualPage.value != 1)
+    actualPage.value = previousPage.value
+  }
+})
 
 const previousPage = computed(() => {
     return actualPage.value - 1;

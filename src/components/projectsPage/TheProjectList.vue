@@ -2,7 +2,7 @@
 import type { Project } from "@/types/Project";
 import ProjectCard from "./ProjectCard.vue";
 import { useProjectStore } from "@/stores/projectStore.ts";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface Props {
     projects: Project[];
@@ -24,6 +24,15 @@ const visibleProjects = computed(() => {
         actualPage.value * page_items,
     );
 });
+
+watch(visibleProjects, (value) => {
+
+  if (value.length === 0){
+  
+    if(actualPage.value != 1)
+    actualPage.value = previousPage.value
+  }
+})
 
 const previousPage = computed(() => {
     return actualPage.value - 1;
