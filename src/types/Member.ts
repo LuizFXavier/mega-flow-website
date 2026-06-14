@@ -35,7 +35,7 @@ export class Member {
     this.dataDesligamento = "";
     this.diretoria = "";
     this.cargo = "";
-    this.fotoURL = "";
+    this.fotoURL = null;
 
     this.projects = [];
   }
