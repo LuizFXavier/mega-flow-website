@@ -9,7 +9,8 @@ import { useMemberStore } from '@/stores/memberStore.ts';
 
 const userStore = useUserStore();
 
-// Referências
+// Este arquivo, e somente esse, foi quase todo feito pela Gemini ;)
+
 const inputArquivoRef = ref<HTMLInputElement | null>(null);
 const urlPreview = ref<string | null>(null);
 const arquivoSelecionado = ref<File | null>(null);
@@ -25,7 +26,6 @@ function abrirSeletor() {
   inputArquivoRef.value?.click();
 }
 
-// 2. Captura o arquivo e gera o preview temporário
 function tratarArquivoSelecionado(event: Event) {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
@@ -34,16 +34,14 @@ function tratarArquivoSelecionado(event: Event) {
   }
 }
 
-// 3. Cancela a ação e volta para a foto original
 function cancelarEdicao() {
   arquivoSelecionado.value = null;
   urlPreview.value = null;
   if (inputArquivoRef.value) {
-    inputArquivoRef.value.value = ''; // Limpa o input
+    inputArquivoRef.value.value = '';
   }
 }
 
-// 4. Salva a foto (Comprime e Envia)
 async function salvarNovaFoto() {
   if (!arquivoSelecionado.value) return;
 
@@ -59,7 +57,7 @@ async function salvarNovaFoto() {
       focusedMember.fotoURL = urlPreview.value;
     }
 
-    // Limpa a interface (os botões de confirmar somem)
+    // Limpa a interface 
     arquivoSelecionado.value = null;
     
   } catch (erro) {

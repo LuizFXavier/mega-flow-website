@@ -85,27 +85,32 @@ const statusMap = new Map<string, string>([
             <div class="w-1/4"></div>
         </header>
 
-        <table v-if="projects.length > 0" class="w-full">
-            <thead class = "justify-items-start
-                            border-y border-gray-border
-                            text-lg
-                            ">
+        <div v-if="projects.length > 0" class="flex-1 min-h-0 overflow-y-auto w-full">
+    
+        <table class="w-full">
+            <thead class="sticky top-0 bg-white z-10
+                        border-y border-gray-border
+                        text-lg">
                 <tr>
-                <th class="text-left
-                           w-35/100
-                           pl-5
-                           py-1">PROJETOS</th>
-                <th class="text-center w-30/100">CARGO</th>
-                <th class="text-center w-35/100">ANDAMENTO</th>
+                    <th class="text-left w-35/100 pl-5 py-2">PROJETOS</th>
+                    <th class="text-center w-30/100 py-2">CARGO</th>
+                    <th class="text-center w-35/100 py-2">ANDAMENTO</th>
                 </tr>
             </thead>
-            <tbody v-for="p in filteredProjects">
-                <DashboardReportItem :titulo="p.projeto.titulo"
-                                     :cargo="getRole(p)"
-                                     :andamento="statusMap.get(p.projeto.status)!"
-                                     :dataAtualizacao="p.projeto.dataAtualizacao"/>
+            
+            <tbody>
+                <DashboardReportItem 
+                    v-for="p in filteredProjects" 
+                    :key="p.projeto.id"
+                    :titulo="p.projeto.titulo"
+                    :cargo="getRole(p)"
+                    :andamento="statusMap.get(p.projeto.status)!"
+                    :dataAtualizacao="p.projeto.dataAtualizacao"
+                />
             </tbody>
         </table>
+    
+</div>
         <div v-else class= "w-full h-full
                             flex place-items-center
                             justify-center">
