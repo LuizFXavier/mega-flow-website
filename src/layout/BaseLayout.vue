@@ -47,15 +47,12 @@ onMounted(async ()=>{
                 <slot name = "header"></slot>
                 
                 <div class="bg-white 
-                    border border-gray-border
-                    rounded-2xl
-                    flex-4
-                    h-8/10
-                    membros.push(m)">
-
-                    <slot :openEditModal="openProfileEditModal">
-                        
-                    </slot>
+                            border border-gray-border
+                            rounded-2xl
+                            flex-1 min-h-0 overflow-hidden"> 
+                        <slot :openEditModal="openProfileEditModal">
+                            
+                        </slot>
                 </div>
             </div>
             
