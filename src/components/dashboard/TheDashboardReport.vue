@@ -3,6 +3,7 @@ import { useUserStore } from '@/stores/userStore';
 import { type Participant } from '@/types/Participant';
 import DashboardReportItem from './DashboardReportItem.vue';
 import TheSearchBar from '../TheSearchBar.vue';
+import { computed, ref } from 'vue';
 
 const userStore = useUserStore();
 
@@ -10,6 +11,23 @@ interface Props{
     projects:Participant[],
     memberIsLeader:Set<string>
 }
+
+const searchInput = ref('');
+
+
+const filteredProjects = computed(() => {
+  
+  if (!searchInput.value.trim()) {
+    return projects;
+  }
+
+  const termo = searchInput.value.toLowerCase();
+
+  return projects.filter(project =>
+    
+    project.projeto.titulo.toLowerCase().includes(termo)
+  );
+});
 
 const {projects, memberIsLeader} = defineProps<Props>();
 
@@ -62,7 +80,7 @@ const statusMap = new Map<string, string>([
                 class="flex 
                         p-3
                         w-1/2">
-                <TheSearchBar :text="'Buscar Projeto'"/>
+                <TheSearchBar :text="'Buscar Projeto'" v-model="searchInput"/>
             </div>
             <div class="w-1/4"></div>
         </header>
@@ -81,7 +99,7 @@ const statusMap = new Map<string, string>([
                 <th class="text-center w-35/100">ANDAMENTO</th>
                 </tr>
             </thead>
-            <tbody v-for="p in projects">
+            <tbody v-for="p in filteredProjects">
                 <DashboardReportItem :titulo="p.projeto.titulo"
                                      :cargo="getRole(p)"
                                      :andamento="statusMap.get(p.projeto.status)!"

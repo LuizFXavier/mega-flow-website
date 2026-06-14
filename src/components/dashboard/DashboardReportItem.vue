@@ -30,8 +30,8 @@ function updatedAt(dataAtualizacao: string) {
         <td class= "pl-5 py-2">
             <h1 class= "text-gray-900
                         text-2xl">
-                <!-- {{ props.titulo }} -->
-                  Plataforma Mega Web
+                {{ props.titulo }}
+                  
             </h1>
             <h2 class= "text-gray-500
                         text-[0.95rem]">
