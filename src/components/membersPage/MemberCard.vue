@@ -32,7 +32,11 @@ function handleClick(){
 }
 
 const visibleProjects = computed(()=>{
-    return member.projects.slice(0,3);
+    return member.projects.slice(0,2);
+})
+
+const hasMoreProjects = computed<boolean>(()=>{
+    return member.projects.length > 2;
 })
 
 function getProject(id:string){
@@ -116,6 +120,9 @@ const userStore = useUserStore();
                 </ul>
             </div>
             
+            <p v-if="hasMoreProjects" class="absolute bottom-0">
+                ...
+            </p>
         </section>
     </div>
 </template>
