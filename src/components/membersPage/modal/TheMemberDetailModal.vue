@@ -125,7 +125,7 @@ function dataDesligamento(){
 
         
         <div v-if="focusedMember().projects.length > 0" 
-            class="w-full max-h-75 overflow-y-auto 
+            class="w-full  overflow-y-auto h-1/4
                     border border-gray-300 rounded-xl shadow-sm bg-white">
             
             <table class="w-full text-left border-collapse">
