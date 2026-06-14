@@ -41,35 +41,40 @@ function openViewModal(project: Project, localindex: number) {
 </script>
 
 <template>
-    <article
-        class="w-full h-full grid grid-cols-3 gap-4 grid-rows-3 p-4 overflow-y-auto"
-    >
-        <ProjectCard
-            v-for="(project, index) in visibleProjects"
-            :key="project.id"
-            @open-modal="openViewModal(project, index)"
-            :project="project"
-        />
-    </article>
+    <article class="w-full h-full flex flex-col">
+    
+        <div
+            class="w-full grid grid-cols-3 gap-4 grid-rows-3 p-4 overflow-y-auto"
+        >
+            <ProjectCard
+                v-for="(project, index) in visibleProjects"
+                :key="project.id"
+                @open-modal="openViewModal(project, index)"
+                :project="project"
+            />
+        </div>
 
-    <div
-        v-if="totalPages > 1"
-        class="flex justify-center items-center gap-4 p-4 border-gray-200"
-    >
-        <button
-            @click="actualPage = previousPage"
-            :disabled="actualPage === 1"
-            class="px-4 py-2 bg-gray-100 rounded disabled:opacity-50 hover:bg-gray-200 transition-colors"
-        >
-            Anterior
-        </button>
-        <span>{{ actualPage }}/{{ totalPages }}</span>
-        <button
-            @click="actualPage = nextPage"
-            :disabled="actualPage === totalPages"
-            class="px-4 py-2 bg-gray-100 rounded disabled:opacity-50 hover:bg-gray-200 transition-colors"
-        >
-            Próximo
-        </button>
-    </div>
+        <div
+            v-if="totalPages > 1"
+            class="flex justify-center items-center gap-4 p-4 border-gray-200"
+            >
+            <div>
+                <button
+                @click="actualPage = previousPage"
+                :disabled="actualPage === 1"
+                class="px-4 py-2 bg-gray-100 rounded disabled:opacity-50 hover:bg-gray-200 transition-colors"
+                >
+                Anterior
+                </button>
+                <span>{{ actualPage }}/{{ totalPages }}</span>
+                <button
+                    @click="actualPage = nextPage"
+                    :disabled="actualPage === totalPages"
+                    class="px-4 py-2 bg-gray-100 rounded disabled:opacity-50 hover:bg-gray-200 transition-colors"
+                >
+                    Próximo
+                </button>
+            </div>
+        </div>
+    </article>
 </template>

@@ -25,9 +25,25 @@ const emit = defineEmits<{
 }>();
 
 
-const page_items = 9;
+const page_items = 8;
 const actualPage = ref(1);
+
 const totalPages = computed(() => Math.ceil(members.length / page_items));
+
+const visibleMembers = computed(() => {
+    return members.slice(
+        (actualPage.value - 1) * page_items,
+        actualPage.value * page_items,
+    );
+});
+
+const previousPage = computed(() => {
+    return actualPage.value - 1;
+});
+
+const nextPage = computed(() => {
+    return actualPage.value + 1;
+});
 
 function openDetailModal(member:Member, localindex:number) {
 
@@ -46,14 +62,39 @@ function openEditModal(member:Member, localindex:number) {
 </script>
 
 <template>
-    <article class="w-full h-full
-                    grid gap-4 
-                    grid-cols-4 grid-rows-2 
-                    p-4 
-                    overflow-y-auto">
-        <MemberCard v-for="(member, index) in members"
-                    :member="member"
-                    @open-modal="openDetailModal(member, index)"
-                    @open-edit-modal="openEditModal(member, index)"/>
-    </article>
+  <article class="w-full h-full flex flex-col">
+      <div class="w-full h-full
+                      grid gap-4 
+                      grid-cols-4 grid-rows-2 
+                      p-4 
+                      overflow-y-auto">
+          <MemberCard v-for="(member, index) in visibleMembers"
+                      :member="member"
+                      @open-modal="openDetailModal(member, index)"
+                      @open-edit-modal="openEditModal(member, index)"/>
+    </div>
+
+    <div
+            v-if="totalPages > 1"
+            class="flex justify-center items-center gap-4 p-4 border-gray-200"
+            >
+            <div>
+                <button
+                @click="actualPage = previousPage"
+                :disabled="actualPage === 1"
+                class="px-4 py-2 bg-gray-100 rounded disabled:opacity-50 hover:bg-gray-200 transition-colors"
+                >
+                Anterior
+                </button>
+                <span>{{ actualPage }}/{{ totalPages }}</span>
+                <button
+                    @click="actualPage = nextPage"
+                    :disabled="actualPage === totalPages"
+                    class="px-4 py-2 bg-gray-100 rounded disabled:opacity-50 hover:bg-gray-200 transition-colors"
+                >
+                    Próximo
+                </button>
+            </div>
+        </div>
+  </article>
 </template>
